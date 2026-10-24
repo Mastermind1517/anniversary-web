@@ -130,7 +130,7 @@ async function runPhase3Validation() {
       const salutation = document.querySelector('.font-handwriting');
       const letterP = document.querySelectorAll('p.font-editorial');
       const svgFlourish = document.querySelector('svg path[d*="M 10,12"]');
-      const unfoldedHint = document.querySelector('[class*="unfoldedHint"]');
+      const _unfoldedHint = document.querySelector('[class*="unfoldedHint"]');
 
       return {
         salutationVisible: salutation ? window.getComputedStyle(salutation).opacity : null,
