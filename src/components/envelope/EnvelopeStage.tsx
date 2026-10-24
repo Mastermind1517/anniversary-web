@@ -42,7 +42,7 @@ export const EnvelopeStage: React.FC<EnvelopeStageProps> = ({
   const letterBottomFoldRef = useRef<HTMLDivElement | null>(null);
   const creaseShadowTopRef = useRef<HTMLDivElement | null>(null);
   const creaseShadowBottomRef = useRef<HTMLDivElement | null>(null);
-  
+
   // Staggered text line refs for progressive editorial ink reveal
   const epistleRibbonRef = useRef<HTMLDivElement | null>(null);
   const salutationRef = useRef<HTMLDivElement | null>(null);
@@ -95,17 +95,18 @@ export const EnvelopeStage: React.FC<EnvelopeStageProps> = ({
       }
 
       // Master Cinematic Scroll-Scrubbed Timeline
+      // Pinned for ~280vh of natural scroll distance
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: trackRef.current,
           start: 'top top',
           end: 'bottom bottom',
-          scrub: 0.8,
+          scrub: 0.85,
           pin: stageRef.current,
           invalidateOnRefresh: true,
           onUpdate: (self) => {
             // Natural sound cues tied to scroll position
-            if (self.progress > 0.16 && !hasOpenedSoundFired.current) {
+            if (self.progress > 0.15 && !hasOpenedSoundFired.current) {
               sound.playWaxCrack();
               hasOpenedSoundFired.current = true;
             } else if (self.progress < 0.10) {
@@ -115,7 +116,7 @@ export const EnvelopeStage: React.FC<EnvelopeStageProps> = ({
             if (self.progress > 0.65 && !hasUnfoldedSoundFired.current) {
               sound.playPaperRustle();
               hasUnfoldedSoundFired.current = true;
-            } else if (self.progress < 0.52) {
+            } else if (self.progress < 0.50) {
               hasUnfoldedSoundFired.current = false;
             }
           },
@@ -125,11 +126,11 @@ export const EnvelopeStage: React.FC<EnvelopeStageProps> = ({
         },
       });
 
-      // 1. Initial State Initialization
+      // 1. Initial State Setup
       gsap.set(flapRef.current, { transformOrigin: 'top center', rotateX: 0, zIndex: 30 });
       gsap.set(letterTopFoldRef.current, { transformOrigin: 'top center', rotateX: -160 });
       gsap.set(letterBottomFoldRef.current, { transformOrigin: 'bottom center', rotateX: 160 });
-      gsap.set(letterRef.current, { yPercent: 0, scale: 0.98, overflow: 'hidden', zIndex: 20 });
+      gsap.set(letterRef.current, { yPercent: 0, scale: 0.98, overflow: 'hidden', zIndex: 10 });
       gsap.set([
         epistleRibbonRef.current,
         salutationRef.current,
@@ -138,163 +139,162 @@ export const EnvelopeStage: React.FC<EnvelopeStageProps> = ({
         line3Ref.current,
         closingRef.current,
         unfoldedHintRef.current,
-      ], { opacity: 0, y: 12 });
+      ], { opacity: 0, y: 10 });
       if (flourishPathRef.current) {
         gsap.set(flourishPathRef.current, { strokeDasharray: 140, strokeDashoffset: 140 });
       }
 
-      // 2. Invitation & Header Softening (0% -> 12%)
+      // 2. Deliberate Pause & Anticipation: Affordance fades, Header softens (0.00 -> 0.12)
       tl.to(invitationRef.current, {
         opacity: 0,
-        y: -14,
-        duration: 0.12,
+        y: -10,
+        duration: 0.08,
         ease: 'power1.out',
       }, 0);
 
       tl.to(headerRef.current, {
         opacity: 0,
-        y: -15,
-        duration: 0.2,
+        y: -12,
+        duration: 0.14,
         ease: 'power1.out',
-      }, 0.05);
+      }, 0.02);
 
-      // 3. Wax Seal lifts and fractures (4% -> 18%)
+      // 3. Wax Seal Tension & Release (0.12 -> 0.22)
       tl.to(sealRef.current, {
-        scale: 1.12,
-        y: -8,
-        duration: 0.09,
+        scale: 1.08,
+        y: -5,
+        duration: 0.06,
         ease: 'power2.out',
-      }, 0.04);
+      }, 0.12);
 
       tl.to(sealRef.current, {
         opacity: 0,
-        scale: 1.3,
-        duration: 0.09,
+        scale: 1.25,
+        duration: 0.07,
         ease: 'power1.in',
-      }, 0.13);
-
-      // 4. Top Flap hinges open in 3D perspective (10% -> 44%)
-      tl.to(flapRef.current, {
-        rotateX: 180,
-        duration: 0.34,
-        ease: 'power2.inOut',
-      }, 0.10);
-
-      // Switch Flap z-index as it rotates past 90 degrees so opened flap sits BEHIND the letter
-      tl.set(flapRef.current, { zIndex: 12 }, 0.26);
-
-      // Light enters the pocket mouth (inner shadow dissolves)
-      tl.to(pocketShadowRef.current, {
-        opacity: 0.1,
-        duration: 0.28,
-        ease: 'power1.out',
       }, 0.16);
 
-      // 5. Letter emerges from envelope pocket (36% -> 68%)
+      // 4. Flap Hinges Open with Authentic Cardstock Physics (0.22 -> 0.52)
+      tl.to(flapRef.current, {
+        rotateX: 180,
+        duration: 0.30,
+        ease: 'power2.inOut',
+      }, 0.22);
+
+      // Flip flap z-index as it rotates past 90 degrees so opened lid rests behind letter
+      tl.set(flapRef.current, { zIndex: 12 }, 0.37);
+
+      // Light penetrates pocket mouth, dissolving inner ambient occlusion
+      tl.to(pocketShadowRef.current, {
+        opacity: 0.08,
+        duration: 0.24,
+        ease: 'power1.out',
+      }, 0.28);
+
+      // 5. Letter Emerges from Envelope Pocket (0.50 -> 0.76)
       const isMobile = window.innerWidth < 640;
-      tl.set(letterRef.current, { overflow: 'visible' }, 0.38);
-      
+      tl.set(letterRef.current, { overflow: 'visible' }, 0.50);
+
       tl.to(letterRef.current, {
-        yPercent: isMobile ? -82 : -70,
-        scale: 1.03,
-        duration: 0.32,
+        yPercent: isMobile ? -84 : -72,
+        scale: 1.02,
+        duration: 0.26,
         ease: 'power2.out',
-      }, 0.38);
+      }, 0.50);
 
       // Elevate letter above front pocket flaps once mostly extracted
-      tl.set(letterRef.current, { zIndex: 28 }, 0.55);
+      tl.set(letterRef.current, { zIndex: 28 }, 0.65);
 
-      // 6. Accordion Unfolds (62% -> 84%)
+      // 6. Accordion Folds Settle Flat (0.72 -> 0.88)
       tl.to(letterTopFoldRef.current, {
         rotateX: 0,
-        duration: 0.22,
+        duration: 0.18,
         ease: 'power2.out',
-      }, 0.62);
+      }, 0.72);
 
       tl.to(letterBottomFoldRef.current, {
         rotateX: 0,
-        duration: 0.22,
+        duration: 0.18,
         ease: 'power2.out',
-      }, 0.68);
+      }, 0.76);
 
-      // Dissolve crease fold shadows as paper flattens
+      // Dissolve crease fold shadows
       tl.to([creaseShadowTopRef.current, creaseShadowBottomRef.current], {
         opacity: 0,
-        duration: 0.16,
+        duration: 0.14,
         ease: 'power1.out',
-      }, 0.68);
+      }, 0.75);
 
-      // 7. Progressive Line-by-Line Editorial Ink Reveal (72% -> 96%)
+      // 7. Progressive Editorial Ink Reveal (0.84 -> 0.98)
       tl.to(epistleRibbonRef.current, {
         opacity: 1,
         y: 0,
-        duration: 0.14,
+        duration: 0.10,
         ease: 'power1.out',
-      }, 0.72);
+      }, 0.84);
 
       tl.to(salutationRef.current, {
         opacity: 1,
         y: 0,
-        duration: 0.16,
+        duration: 0.12,
         ease: 'power1.out',
-      }, 0.76);
+      }, 0.87);
 
       tl.to(line1Ref.current, {
         opacity: 1,
         y: 0,
-        duration: 0.15,
+        duration: 0.12,
         ease: 'power1.out',
-      }, 0.80);
+      }, 0.90);
 
       tl.to(line2Ref.current, {
         opacity: 1,
         y: 0,
-        duration: 0.15,
+        duration: 0.12,
         ease: 'power1.out',
-      }, 0.84);
+      }, 0.92);
 
       tl.to(line3Ref.current, {
         opacity: 1,
         y: 0,
-        duration: 0.15,
+        duration: 0.12,
         ease: 'power1.out',
-      }, 0.88);
+      }, 0.94);
 
       tl.to(closingRef.current, {
-        opacity: 1,
-        y: 0,
-        duration: 0.14,
-        ease: 'power1.out',
-      }, 0.91);
-
-      // Draw the hand-crafted botanical flourish under the signature
-      if (flourishPathRef.current) {
-        tl.to(flourishPathRef.current, {
-          strokeDashoffset: 0,
-          duration: 0.16,
-          ease: 'power2.out',
-        }, 0.92);
-      }
-
-      tl.to(unfoldedHintRef.current, {
         opacity: 1,
         y: 0,
         duration: 0.12,
         ease: 'power1.out',
       }, 0.95);
 
-      // 8. Continuous Narrative Bridge: Soft focus shift at completion (96% -> 100%)
+      if (flourishPathRef.current) {
+        tl.to(flourishPathRef.current, {
+          strokeDashoffset: 0,
+          duration: 0.14,
+          ease: 'power2.out',
+        }, 0.95);
+      }
+
+      tl.to(unfoldedHintRef.current, {
+        opacity: 1,
+        y: 0,
+        duration: 0.10,
+        ease: 'power1.out',
+      }, 0.97);
+
+      // 8. Subtle Narrative Bridge at End of Pin (0.97 -> 1.00)
       tl.to(envelopeWrapRef.current, {
-        opacity: 0.85,
-        duration: 0.08,
-      }, 0.96);
+        opacity: 0.9,
+        duration: 0.05,
+      }, 0.98);
 
     }, trackRef);
 
     return () => ctx.revert();
   }, [onOpenComplete]);
 
-  // Click invitation to smoothly scroll down and unfold
+  // Click or keyboard trigger to smoothly scroll down and unfold
   const handleScrollToUnfold = () => {
     sound.playWaxCrack();
     if (trackRef.current) {
@@ -304,7 +304,7 @@ export const EnvelopeStage: React.FC<EnvelopeStageProps> = ({
   };
 
   return (
-    <div ref={trackRef} className="relative w-full min-h-[270vh] z-20">
+    <div ref={trackRef} className="relative w-full min-h-[280vh] z-20">
       {/* Pinned Stage Viewport Container */}
       <section
         ref={stageRef}
@@ -312,16 +312,16 @@ export const EnvelopeStage: React.FC<EnvelopeStageProps> = ({
       >
         {/* Soft Ambient Keylight Halo behind envelope */}
         <div 
-          className="absolute w-[460px] sm:w-[620px] h-[460px] sm:h-[620px] rounded-full pointer-events-none -z-10"
+          className="absolute w-[460px] sm:w-[640px] h-[460px] sm:h-[640px] rounded-full pointer-events-none -z-10"
           style={{
-            background: 'radial-gradient(circle, rgba(142, 22, 36, 0.04) 0%, rgba(242, 239, 235, 0.6) 50%, transparent 75%)',
+            background: 'radial-gradient(circle, rgba(142, 22, 36, 0.035) 0%, rgba(242, 239, 235, 0.7) 45%, transparent 72%)',
             filter: 'blur(55px)',
           }}
         />
 
         {/* Editorial Scene Header */}
         <div ref={headerRef} className="text-center mb-6 sm:mb-8 max-w-xl transition-all duration-700 pointer-events-none">
-          <span className="font-sans text-[11px] uppercase tracking-[0.25em] text-[#8E1624] font-semibold block mb-2">
+          <span className="font-sans text-[11px] uppercase tracking-[0.28em] text-[#8E1624] font-semibold block mb-2">
             Anniversary Epistle
           </span>
           <h1 className="font-serif text-3xl sm:text-5xl font-light tracking-wide text-[#171717] mb-2 leading-tight">
@@ -332,38 +332,40 @@ export const EnvelopeStage: React.FC<EnvelopeStageProps> = ({
           </p>
         </div>
 
-        {/* The 3D Envelope Construct */}
+        {/* The Physical 3D Envelope Construct */}
         <div 
           ref={envelopeWrapRef} 
           className="relative w-[88vw] max-w-[480px] aspect-[1.5/1] perspective-1600 flex items-center justify-center transition-opacity"
         >
-          {/* Ambient Desk Contact Shadow */}
-          <div className="absolute -bottom-6 sm:-bottom-8 left-1/2 -translate-x-1/2 w-[88%] h-8 bg-black/60 rounded-full blur-xl pointer-events-none" />
+          {/* Ambient Multi-Layered Desk Contact Shadows */}
+          <div className="absolute -bottom-7 sm:-bottom-9 left-1/2 -translate-x-1/2 w-[86%] h-9 bg-[#171717]/35 rounded-[50%] blur-2xl pointer-events-none" />
+          <div className="absolute -bottom-3 sm:-bottom-4 left-1/2 -translate-x-1/2 w-[72%] h-4 bg-[#09090A]/40 rounded-[50%] blur-md pointer-events-none" />
 
-          {/* Envelope Shell Body */}
-          <div className="relative w-full h-full bg-[#171717] rounded-xl paper-shadow border border-[#303030] flex items-center justify-center overflow-visible">
+          {/* Envelope Shell Body with Cardstock Grain and Physical Shadow */}
+          <div className="relative w-full h-full cardstock-grain rounded-xl envelope-desk-shadow border border-[#303030]/80 flex items-center justify-center overflow-visible">
             
-            {/* Inner Pocket Felt / Silk Lining */}
-            <div className="absolute inset-2 rounded-lg bg-[#09090A] border border-[#303030]/40 overflow-hidden">
+            {/* Inner Pocket Lining (Dark Felt & Subtle Silk Grid) */}
+            <div className="absolute inset-1.5 sm:inset-2 rounded-lg bg-[#09090A] border border-[#303030]/50 overflow-hidden">
               <div 
-                className="w-full h-full opacity-20"
+                className="w-full h-full opacity-15"
                 style={{
-                  backgroundImage: 'radial-gradient(rgba(142, 22, 36, 0.25) 1px, transparent 1px)',
-                  backgroundSize: '16px 16px',
+                  backgroundImage: 'radial-gradient(rgba(142, 22, 36, 0.4) 1px, transparent 1px)',
+                  backgroundSize: '14px 14px',
                 }}
               />
+              <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-transparent" />
             </div>
 
             {/* Inner Pocket Ambient Occlusion Shadow */}
             <div
               ref={pocketShadowRef}
-              className="absolute inset-2 rounded-lg bg-black/60 pointer-events-none z-10 transition-opacity"
+              className="absolute inset-1.5 sm:inset-2 rounded-lg bg-black/70 pointer-events-none z-10 transition-opacity"
             />
 
             {/* FOLDED PARCHMENT LETTER */}
             <div
               ref={letterRef}
-              className="absolute bottom-2.5 w-[92%] sm:w-[93%] h-[88%] bg-[#F9F8F5] text-[#171717] rounded-lg paper-shadow p-4 sm:p-6 flex flex-col justify-between border border-[#F2EFEB]"
+              className="absolute bottom-2 sm:bottom-2.5 w-[92%] sm:w-[94%] h-[88%] bg-[#F9F8F5] text-[#171717] rounded-lg paper-shadow p-4 sm:p-6 flex flex-col justify-between border border-[#F2EFEB]"
               style={{
                 transformStyle: 'preserve-3d',
               }}
@@ -392,7 +394,7 @@ export const EnvelopeStage: React.FC<EnvelopeStageProps> = ({
               <div className="flex-1 flex flex-col justify-center text-center my-1">
                 {/* Salutation */}
                 <div ref={salutationRef}>
-                  <span className="font-handwriting text-3xl sm:text-4xl text-[#8E1624] mb-1.5 block">
+                  <span className="font-handwriting text-2xl sm:text-4xl text-[#8E1624] mb-1.5 block">
                     {openingLetter?.salutation || `Dearest ${partner2},`}
                   </span>
                 </div>
@@ -400,7 +402,7 @@ export const EnvelopeStage: React.FC<EnvelopeStageProps> = ({
                 {/* Staggered Line 1 */}
                 <p 
                   ref={line1Ref} 
-                  className="font-editorial text-sm sm:text-base text-[#171717] leading-relaxed italic max-w-sm mx-auto"
+                  className="font-editorial text-xs sm:text-base text-[#171717] leading-relaxed italic max-w-sm mx-auto"
                 >
                   {openingLetter?.lines?.[0] || 'Every year with you unfolds like a romance I never want to put down.'}
                 </p>
@@ -422,14 +424,14 @@ export const EnvelopeStage: React.FC<EnvelopeStageProps> = ({
                 </p>
 
                 {/* Closing & Flourish Signature */}
-                <div ref={closingRef} className="mt-2.5 flex flex-col items-center">
-                  <span ref={signatureRef} className="font-handwriting text-2xl sm:text-3xl text-[#8E1624]">
+                <div ref={closingRef} className="mt-2 flex flex-col items-center">
+                  <span ref={signatureRef} className="font-handwriting text-xl sm:text-3xl text-[#8E1624]">
                     {openingLetter?.closing || 'Always yours,'} {openingLetter?.signature || partner1}
                   </span>
                   
-                  {/* Subtle Botanical SVG Flourish under signature */}
+                  {/* Botanical SVG Flourish under signature */}
                   <svg 
-                    className="w-24 h-4 text-[#8E1624] opacity-80 mt-0.5 overflow-visible" 
+                    className="w-20 sm:w-24 h-3.5 sm:h-4 text-[#8E1624] opacity-80 mt-0.5 overflow-visible" 
                     viewBox="0 0 140 20" 
                     fill="none"
                   >
@@ -462,32 +464,75 @@ export const EnvelopeStage: React.FC<EnvelopeStageProps> = ({
               </div>
             </div>
 
-            {/* Pocket Triangular Side & Bottom Flaps (CSS polygon geometry) */}
-            <div className="absolute inset-0 z-25 pointer-events-none">
-              {/* Left Pocket Flap */}
-              <div
-                className="absolute inset-0 bg-[#171717] rounded-xl border border-[#303030] shadow-md"
-                style={{
-                  clipPath: 'polygon(0% 0%, 50% 50%, 0% 100%)',
-                }}
-              />
-              {/* Right Pocket Flap */}
-              <div
-                className="absolute inset-0 bg-[#141416] rounded-xl border border-[#303030] shadow-md"
-                style={{
-                  clipPath: 'polygon(100% 0%, 50% 50%, 100% 100%)',
-                }}
-              />
-              {/* Bottom Pocket Flap */}
-              <div
-                className="absolute inset-0 bg-[#1F1F22] rounded-xl border-t border-[#303030] shadow-inner"
-                style={{
-                  clipPath: 'polygon(0% 100%, 50% 48%, 100% 100%)',
-                }}
-              />
+            {/* REALISTIC EURO-FLAP FRONT POCKET (Precision Vector Geometry) */}
+            <div className="absolute inset-0 z-20 pointer-events-none overflow-hidden rounded-xl">
+              <svg 
+                className="w-full h-full" 
+                viewBox="0 0 480 320" 
+                preserveAspectRatio="none"
+              >
+                <defs>
+                  {/* Left Flap Gradient */}
+                  <linearGradient id="pocketLeftGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#1e1e21" />
+                    <stop offset="60%" stopColor="#171718" />
+                    <stop offset="100%" stopColor="#101011" />
+                  </linearGradient>
+
+                  {/* Right Flap Gradient */}
+                  <linearGradient id="pocketRightGrad" x1="100%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#1b1b1e" />
+                    <stop offset="60%" stopColor="#151516" />
+                    <stop offset="100%" stopColor="#0e0e0f" />
+                  </linearGradient>
+
+                  {/* Bottom Flap Gradient */}
+                  <linearGradient id="pocketBottomGrad" x1="50%" y1="0%" x2="50%" y2="100%">
+                    <stop offset="0%" stopColor="#222226" />
+                    <stop offset="45%" stopColor="#19191b" />
+                    <stop offset="100%" stopColor="#121213" />
+                  </linearGradient>
+
+                  {/* Bottom Flap Upward Contact Shadow onto side flaps */}
+                  <filter id="bottomFlapThroatShadow" x="-10%" y="-25%" width="120%" height="150%">
+                    <feDropShadow dx="0" dy="-3" stdDeviation="4" floodColor="#000000" floodOpacity="0.55" />
+                  </filter>
+                </defs>
+
+                {/* Left Side Inward Flap */}
+                <path
+                  d="M 0,0 L 175,160 L 0,320 Z"
+                  fill="url(#pocketLeftGrad)"
+                  stroke="#2d2d30"
+                  strokeWidth="0.75"
+                />
+
+                {/* Right Side Inward Flap */}
+                <path
+                  d="M 480,0 L 305,160 L 480,320 Z"
+                  fill="url(#pocketRightGrad)"
+                  stroke="#2d2d30"
+                  strokeWidth="0.75"
+                />
+
+                {/* Bottom Overlapping Flap with Soft Throat Line Contour */}
+                <path
+                  d="M 0,320 L 120,165 Q 240,145 360,165 L 480,320 Z"
+                  fill="url(#pocketBottomGrad)"
+                  filter="url(#bottomFlapThroatShadow)"
+                />
+
+                {/* Bottom Flap Crisp Hairline Paper Stock Edge Highlight */}
+                <path
+                  d="M 0,320 L 120,165 Q 240,145 360,165 L 480,320"
+                  fill="none"
+                  stroke="#38383c"
+                  strokeWidth="0.85"
+                />
+              </svg>
             </div>
 
-            {/* TOP HINGED FLAP (Lid with 3D folding) */}
+            {/* TOP HINGED EURO FLAP (Lid with 3D folding and organic wax seal) */}
             <div
               ref={flapRef}
               className="absolute top-0 left-0 w-full h-[58%] origin-top preserve-3d z-30"
@@ -496,25 +541,74 @@ export const EnvelopeStage: React.FC<EnvelopeStageProps> = ({
                 transformOrigin: 'top center',
               }}
             >
-              {/* Outer Flap Surface (Visible when closed) */}
-              <div
-                className="w-full h-full bg-gradient-to-b from-[#303030] to-[#171717] rounded-t-xl border border-[#303030] backface-hidden shadow-xl"
+              {/* Outer Flap Face (Visible when closed) */}
+              <div 
+                className="w-full h-full backface-hidden"
                 style={{
-                  clipPath: 'polygon(0% 0%, 100% 0%, 50% 100%)',
+                  filter: 'drop-shadow(0px 8px 14px rgba(0, 0, 0, 0.45))',
                 }}
-              />
+              >
+                <svg 
+                  className="w-full h-full" 
+                  viewBox="0 0 480 186" 
+                  preserveAspectRatio="none"
+                >
+                  <defs>
+                    <linearGradient id="topFlapOuterGrad" x1="50%" y1="0%" x2="50%" y2="100%">
+                      <stop offset="0%" stopColor="#2c2c30" />
+                      <stop offset="50%" stopColor="#1e1e21" />
+                      <stop offset="100%" stopColor="#161618" />
+                    </linearGradient>
+                  </defs>
 
-              {/* Reverse Flap Surface (Visible when rotated 180deg) */}
+                  {/* Euro-Flap Contour with Soft Rounded Apex */}
+                  <path
+                    d="M 0,0 L 480,0 L 265,174 Q 240,186 215,174 Z"
+                    fill="url(#topFlapOuterGrad)"
+                  />
+
+                  {/* Flap Hairline Edge Highlight */}
+                  <path
+                    d="M 0,0 L 215,174 Q 240,186 265,174 L 480,0"
+                    fill="none"
+                    stroke="#38383c"
+                    strokeWidth="0.9"
+                  />
+                </svg>
+              </div>
+
+              {/* Reverse Flap Face (Visible when rotated 180deg) */}
               <div
-                className="absolute inset-0 bg-gradient-to-t from-[#141416] to-[#26262A] rounded-b-xl border border-[#303030] shadow-inner"
+                className="absolute inset-0"
                 style={{
-                  clipPath: 'polygon(0% 100%, 100% 100%, 50% 0%)',
                   transform: 'rotateX(180deg)',
                   backfaceVisibility: 'hidden',
+                  filter: 'drop-shadow(0px -4px 10px rgba(0, 0, 0, 0.35))',
                 }}
-              />
+              >
+                <svg 
+                  className="w-full h-full" 
+                  viewBox="0 0 480 186" 
+                  preserveAspectRatio="none"
+                >
+                  <defs>
+                    <linearGradient id="topFlapInnerGrad" x1="50%" y1="100%" x2="50%" y2="0%">
+                      <stop offset="0%" stopColor="#121214" />
+                      <stop offset="70%" stopColor="#1a1a1d" />
+                      <stop offset="100%" stopColor="#242428" />
+                    </linearGradient>
+                  </defs>
 
-              {/* Wax Seal at the Apex of the Flap */}
+                  <path
+                    d="M 0,0 L 480,0 L 265,174 Q 240,186 215,174 Z"
+                    fill="url(#topFlapInnerGrad)"
+                    stroke="#2a2a2d"
+                    strokeWidth="0.8"
+                  />
+                </svg>
+              </div>
+
+              {/* Organic Matte Crimson Wax Seal at the Euro-Flap Apex */}
               <div
                 ref={sealRef}
                 className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 z-35 flex flex-col items-center"
@@ -530,22 +624,29 @@ export const EnvelopeStage: React.FC<EnvelopeStageProps> = ({
           </div>
         </div>
 
-        {/* REFINED INVITATION AFFORDANCE */}
+        {/* BESPOKE MINIMAL EDITORIAL AFFORDANCE */}
         <div
           ref={invitationRef}
           onClick={handleScrollToUnfold}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              handleScrollToUnfold();
+            }
+          }}
           role="button"
           tabIndex={0}
-          aria-label="Scroll down or click to open letter"
-          className="mt-8 sm:mt-10 flex flex-col items-center gap-2 cursor-pointer transition-transform duration-300 hover:scale-105"
+          aria-label="Scroll to unfold or tap the wax seal to open"
+          className="mt-8 sm:mt-10 flex flex-col items-center gap-2 cursor-pointer group focus:outline-none focus-visible:ring-1 focus-visible:ring-[#8E1624]/60 rounded-md px-4 py-2 transition-all duration-300 hover:opacity-85"
         >
-          <span className="font-sans text-xs uppercase tracking-[0.2em] text-[#71717A] font-medium">
-            {invitation?.scrollPrompt || 'Scroll to Unfold'}
-          </span>
-          <div className="w-5 h-8 rounded-full border border-[#303030]/40 flex items-start justify-center p-1">
-            <div className="w-1 h-2 rounded-full bg-[#8E1624] animate-bounce" />
+          <div className="flex items-center gap-3">
+            <span className="w-8 sm:w-12 h-[1px] bg-[#171717]/25 transition-all duration-300 group-hover:w-14 group-hover:bg-[#8E1624]/50" />
+            <span className="font-sans text-[11px] sm:text-xs uppercase tracking-[0.28em] text-[#171717]/80 group-hover:text-[#8E1624] font-medium transition-colors">
+              {invitation?.scrollPrompt || 'Scroll to Unfold'}
+            </span>
+            <span className="w-8 sm:w-12 h-[1px] bg-[#171717]/25 transition-all duration-300 group-hover:w-14 group-hover:bg-[#8E1624]/50" />
           </div>
-          <span className="font-editorial text-xs italic text-[#71717A]">
+          <span className="font-serif italic text-xs tracking-wide text-[#71717A] group-hover:text-[#303030] transition-colors">
             {invitation?.tapSealPrompt || '(or tap the wax seal)'}
           </span>
         </div>
