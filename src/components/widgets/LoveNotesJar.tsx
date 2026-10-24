@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import type { LoveNote } from '../../types';
 import { sound } from '../audio/SoundEngine';
-import { Heart, Sparkles, CheckCircle2 } from 'lucide-react';
+import { Heart, ChevronLeft, ChevronRight, Check } from 'lucide-react';
 import { ElegantModal } from '../common/ElegantModal';
 
 interface LoveNotesJarProps {
@@ -12,102 +12,152 @@ export const LoveNotesJar: React.FC<LoveNotesJarProps> = ({ notes }) => {
   const [openedNotes, setOpenedNotes] = useState<number[]>([]);
   const [activeModalNote, setActiveModalNote] = useState<LoveNote | null>(null);
 
-  const handleOpenNote = (note: LoveNote) => {
+  const handleOpenNote = useCallback((note: LoveNote) => {
     sound.playPaperRustle();
-    if (!openedNotes.includes(note.id)) {
-      const nextOpened = [...openedNotes, note.id];
-      setOpenedNotes(nextOpened);
-      if (nextOpened.length === notes.length) {
-        sound.playChime(659.25); // E5 celebration chime
-      } else {
-        sound.playChime(523.25); // C5 chime
+    setOpenedNotes((prev) => {
+      if (!prev.includes(note.id)) {
+        const next = [...prev, note.id];
+        if (next.length === notes.length) {
+          sound.playChime(659.25); // E5 celebration chime
+        } else {
+          sound.playChime(523.25); // C5 chime
+        }
+        return next;
       }
-    }
+      return prev;
+    });
     setActiveModalNote(note);
-  };
+  }, [notes.length]);
+
+  // Navigate to previous note in modal
+  const handlePrevNote = useCallback((e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    if (!activeModalNote) return;
+    const currentIdx = notes.findIndex((n) => n.id === activeModalNote.id);
+    const prevIdx = (currentIdx - 1 + notes.length) % notes.length;
+    handleOpenNote(notes[prevIdx]);
+  }, [activeModalNote, handleOpenNote, notes]);
+
+  // Navigate to next note in modal
+  const handleNextNote = useCallback((e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    if (!activeModalNote) return;
+    const currentIdx = notes.findIndex((n) => n.id === activeModalNote.id);
+    const nextIdx = (currentIdx + 1) % notes.length;
+    handleOpenNote(notes[nextIdx]);
+  }, [activeModalNote, handleOpenNote, notes]);
+
+  // Keyboard navigation for active modal (Left/Right arrows)
+  useEffect(() => {
+    if (!activeModalNote) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        handlePrevNote();
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        handleNextNote();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [activeModalNote, handlePrevNote, handleNextNote]);
 
   const progressPercent = Math.round((openedNotes.length / notes.length) * 100);
 
   return (
-    <section id="notes-section" className="relative w-full py-24 px-4 sm:px-8 z-10">
+    <section id="notes-section" className="relative w-full py-28 px-4 sm:px-8 z-10 select-none">
       {/* Header */}
-      <div className="text-center max-w-xl mx-auto mb-14">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#8E1624]/10 border border-[#8E1624]/20 text-[#8E1624] text-xs font-sans uppercase tracking-widest mb-3">
+      <div className="text-center max-w-xl mx-auto mb-16">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-sm bg-[#171717]/5 border border-[#171717]/10 text-[#8E1624] text-[11px] font-sans uppercase tracking-[0.28em] mb-3.5">
           <Heart className="w-3.5 h-3.5 fill-[#8E1624]" />
-          <span>Chapter IV • Keepsake Notes</span>
+          <span>Anthology • Chapter IV</span>
         </div>
-        <h2 className="font-serif text-3xl sm:text-5xl font-light text-[#171717] tracking-wide mb-3">
-          Twelve Unspoken Reasons
+        <h2 className="font-serif text-3xl sm:text-5xl md:text-6xl font-light text-[#171717] tracking-wide mb-3">
+          Twelve Inscribed Vows
         </h2>
-        <p className="font-editorial text-lg sm:text-xl text-[#71717A] italic mb-6">
-          A collection of folded origami keepsakes. Click each letter to unfold a reason why loving you is effortless.
+        <p className="font-editorial text-base sm:text-xl text-[#71717A] italic leading-relaxed mb-6">
+          A collection of folded keepsake letters. Unfold each letter to reveal a reason why loving you is effortless.
         </p>
 
-        {/* Discovery Tracker */}
-        <div className="inline-flex flex-col items-center gap-2 px-5 py-2.5 rounded-2xl bg-white border border-[#F2EFEB] shadow-sm">
-          <div className="flex items-center gap-2 text-xs font-sans uppercase tracking-wider text-[#8E1624]">
-            <Sparkles className="w-3.5 h-3.5" />
+        {/* Quiet Editorial Discovery Tracker */}
+        <div className="inline-flex flex-col items-center gap-2 px-6 py-2.5 rounded-sm bg-white border border-[#171717]/10 shadow-[0_2px_8px_rgba(23,23,23,0.03)]">
+          <div className="flex items-center gap-3 text-[10px] font-sans uppercase tracking-[0.24em] text-[#171717]/80">
+            <span className="w-4 h-[1px] bg-[#171717]/20" />
             <span>
-              Unfolded: {openedNotes.length} of {notes.length} Love Notes ({progressPercent}%)
+              Unveiled: {openedNotes.length} of {notes.length} Letters ({progressPercent}%)
             </span>
+            <span className="w-4 h-[1px] bg-[#171717]/20" />
           </div>
-          <div className="w-48 h-1.5 bg-[#F2EFEB] rounded-full overflow-hidden">
+          <div className="w-44 h-1 bg-[#F2EFEB] rounded-full overflow-hidden">
             <div
-              className="h-full bg-gradient-to-r from-[#4F0D15] via-[#8E1624] to-[#A81E2E] transition-all duration-500"
+              className="h-full bg-[#8E1624] transition-all duration-500 rounded-full"
               style={{ width: `${progressPercent}%` }}
             />
           </div>
           {openedNotes.length === notes.length && (
-            <span className="font-handwriting text-[#8E1624] text-lg animate-pulse">
-              You found all 12 secrets! My heart is completely yours.
+            <span className="font-editorial italic text-[#8E1624] text-xs mt-0.5">
+              All twelve epistles unfolded. My heart is completely yours.
             </span>
           )}
         </div>
       </div>
 
-      {/* Grid of Folded Origami Cards */}
+      {/* Grid of Folded Keepsake Letter Cards */}
       <div className="max-w-6xl mx-auto grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
         {notes.map((note) => {
           const isOpened = openedNotes.includes(note.id);
+          const noteNumber = String(note.id).padStart(2, '0');
+
           return (
             <div
               key={note.id}
               onClick={() => handleOpenNote(note)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  handleOpenNote(note);
+                }
+              }}
               role="button"
               tabIndex={0}
-              aria-label={`Open note: ${note.teaser}`}
-              className={`relative p-5 rounded-xl border transition-all duration-300 cursor-pointer text-left flex flex-col justify-between min-h-[150px] sm:min-h-[170px] select-none ${
+              aria-label={`Unfold letter ${noteNumber}: ${note.teaser}`}
+              className={`relative p-5 sm:p-6 rounded-sm border transition-all duration-300 cursor-pointer text-left flex flex-col justify-between min-h-[160px] sm:min-h-[180px] shadow-[0_2px_12px_rgba(23,23,23,0.03)] hover:shadow-[0_12px_28px_-6px_rgba(23,23,23,0.08)] hover:-translate-y-1 group focus:outline-none focus-visible:ring-1 focus-visible:ring-[#8E1624] ${
                 isOpened
-                  ? 'bg-[#F9F8F5] border-[#8E1624]/30 shadow-sm'
-                  : 'bg-white border-[#F2EFEB] hover:border-[#8E1624]/40 hover:shadow-md hover:-translate-y-1'
+                  ? 'bg-[#F9F8F5] border-[#8E1624]/25'
+                  : 'bg-white border-[#171717]/10 hover:border-[#8E1624]/40'
               }`}
             >
-              {/* Origami Fold Angle Gradient */}
-              <div className="absolute top-0 right-0 w-8 h-8 bg-gradient-to-bl from-black/5 to-transparent rounded-tr-xl pointer-events-none" />
-
-              <div className="flex items-center justify-between">
-                <span className="font-sans text-[10px] tracking-widest uppercase text-[#8E1624] font-semibold">
-                  Note #{note.id}
+              {/* Top Meta: Number & Category */}
+              <div className="flex items-center justify-between pb-2 border-b border-[#171717]/8 text-xs">
+                <span className="font-sans text-[10px] tracking-[0.24em] uppercase text-[#71717A] font-medium group-hover:text-[#171717] transition-colors">
+                  Letter {noteNumber}
                 </span>
                 {isOpened ? (
-                  <CheckCircle2 className="w-4 h-4 text-[#8E1624]" />
+                  <span className="inline-flex items-center gap-1 text-[9px] font-sans uppercase tracking-widest text-[#8E1624] font-medium">
+                    <Check className="w-3 h-3 text-[#8E1624]" />
+                    <span>Read</span>
+                  </span>
                 ) : (
-                  <Heart className="w-3.5 h-3.5 text-[#71717A] hover:text-[#8E1624] transition-colors" />
+                  <span className="text-[9px] font-sans uppercase tracking-[0.2em] text-[#8E1624] font-medium">
+                    {note.category}
+                  </span>
                 )}
               </div>
 
-              <div className="my-2">
-                <span className="font-handwriting text-2xl text-[#171717] block leading-snug">
+              {/* Note Teaser Title */}
+              <div className="my-2.5">
+                <h3 className="font-serif text-lg sm:text-xl font-normal text-[#171717] leading-snug group-hover:text-[#8E1624] transition-colors">
                   "{note.teaser}"
-                </span>
-                <span className="font-sans text-[10px] uppercase tracking-wider text-[#71717A] mt-1 block">
-                  {note.category}
-                </span>
+                </h3>
               </div>
 
-              <div className="pt-2 border-t border-[#171717]/5 flex items-center justify-between text-[11px] font-sans text-[#8E1624]">
-                <span className="font-medium hover:underline">
-                  {isOpened ? 'Read again' : 'Unfold note →'}
+              {/* Bottom Affordance */}
+              <div className="pt-2 border-t border-[#171717]/8 flex items-center justify-between text-[10px] font-sans text-[#8E1624]">
+                <span className="font-medium tracking-wider uppercase group-hover:translate-x-0.5 transition-transform">
+                  {isOpened ? 'Read Again →' : 'Unfold Letter →'}
                 </span>
               </div>
             </div>
@@ -115,21 +165,48 @@ export const LoveNotesJar: React.FC<LoveNotesJarProps> = ({ notes }) => {
         })}
       </div>
 
-      {/* Note Unfolded Modal */}
+      {/* Note Unfolded Modal with In-Modal Pagination */}
       <ElegantModal
         isOpen={activeModalNote !== null}
         onClose={() => setActiveModalNote(null)}
         title={activeModalNote ? `"${activeModalNote.teaser}"` : ''}
-        subtitle={activeModalNote ? `Reason #${activeModalNote.id} • ${activeModalNote.category}` : ''}
-        icon={<Heart className="w-4 h-4 fill-[#8E1624] text-[#8E1624]" />}
+        subtitle={activeModalNote ? `Letter 0${activeModalNote.id} • ${activeModalNote.category}` : ''}
+        icon={<Heart className="w-3.5 h-3.5 fill-[#8E1624] text-[#8E1624]" />}
       >
-        <p className="font-editorial text-xl sm:text-2xl text-[#171717] leading-relaxed italic border-l-2 border-[#8E1624]/50 pl-4 my-4">
-          {activeModalNote?.content}
-        </p>
+        <div className="my-5">
+          <p className="font-serif text-xl sm:text-2xl font-light text-[#171717] leading-relaxed italic border-l-2 border-[#8E1624]/40 pl-5 py-1">
+            "{activeModalNote?.content}"
+          </p>
 
-        <div className="pt-3 border-t border-[#171717]/10 flex items-center justify-between text-xs text-[#71717A] font-sans">
-          <span>Kept in my heart forever</span>
-          <span className="font-handwriting text-2xl text-[#8E1624]">Forever Yours</span>
+          <div className="mt-6 flex items-center justify-between pt-3 border-t border-[#171717]/10 text-xs text-[#71717A] font-sans">
+            <span className="font-editorial italic text-xs text-[#71717A]">Inscribed in heart forever</span>
+            <span className="font-handwriting text-2xl text-[#8E1624]">Forever Yours</span>
+          </div>
+        </div>
+
+        {/* Modal Pagination Navigation Bar */}
+        <div className="mt-4 pt-3 border-t border-[#171717]/10 flex items-center justify-between text-xs font-sans">
+          <button
+            onClick={handlePrevNote}
+            className="inline-flex items-center gap-1.5 text-[#71717A] hover:text-[#8E1624] uppercase tracking-wider text-[10px] transition-colors cursor-pointer py-1 px-2 rounded hover:bg-black/5"
+            aria-label="Previous letter (Left Arrow)"
+          >
+            <ChevronLeft className="w-3.5 h-3.5" />
+            <span>Previous</span>
+          </button>
+
+          <span className="text-[10px] font-mono text-[#71717A] uppercase tracking-widest">
+            {activeModalNote ? `${String(activeModalNote.id).padStart(2, '0')} / ${String(notes.length).padStart(2, '0')}` : ''}
+          </span>
+
+          <button
+            onClick={handleNextNote}
+            className="inline-flex items-center gap-1.5 text-[#71717A] hover:text-[#8E1624] uppercase tracking-wider text-[10px] transition-colors cursor-pointer py-1 px-2 rounded hover:bg-black/5"
+            aria-label="Next letter (Right Arrow)"
+          >
+            <span>Next</span>
+            <ChevronRight className="w-3.5 h-3.5" />
+          </button>
         </div>
       </ElegantModal>
     </section>
