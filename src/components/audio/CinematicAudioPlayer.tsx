@@ -46,12 +46,12 @@ export const CinematicAudioPlayer: React.FC = () => {
     >
       {/* EXPANDED DELUXE DRAWER */}
       {isExpanded && (
-        <div className="mb-2 bg-[#160f18]/95 backdrop-blur-xl border border-[#d4af37]/35 rounded-2xl p-4 sm:p-5 shadow-2xl animate-in fade-in slide-in-from-bottom-2 duration-200 text-[#fbf8f2]">
+        <div className="mb-2 bg-[#171717]/95 backdrop-blur-xl border border-[#303030] rounded-2xl p-4 sm:p-5 shadow-2xl animate-in fade-in slide-in-from-bottom-2 duration-200 text-white">
           {/* Top Bar: Track Meta & Collapse */}
           <div className="flex items-center justify-between mb-3 border-b border-white/10 pb-2">
             <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-[#d4af37] animate-pulse" />
-              <span className="font-sans text-[10px] uppercase tracking-widest text-[#d4af37]">
+              <span className="w-2 h-2 rounded-full bg-[#8E1624] animate-pulse" />
+              <span className="font-sans text-[10px] uppercase tracking-widest text-[#8E1624]">
                 Track {currentTrackIndex + 1} of {tracks.length}
               </span>
             </div>
@@ -62,7 +62,7 @@ export const CinematicAudioPlayer: React.FC = () => {
 
           {/* Track Title */}
           <div className="mb-3">
-            <h4 className="font-serif text-lg font-medium text-[#fbf8f2] leading-tight">
+            <h4 className="font-serif text-lg font-medium text-white leading-tight">
               {currentTrack.title}
             </h4>
             <p className="font-editorial text-xs text-neutral-300 italic mt-0.5">
@@ -83,7 +83,7 @@ export const CinematicAudioPlayer: React.FC = () => {
               className="relative w-full h-2 bg-white/10 rounded-full cursor-pointer overflow-hidden group py-1"
             >
               <div
-                className="h-full bg-gradient-to-r from-[#8b1e2b] via-[#d4af37] to-[#f5e4a8] rounded-full transition-all duration-100 group-hover:brightness-110"
+                className="h-full bg-gradient-to-r from-[#4F0D15] via-[#8E1624] to-[#A81E2E] rounded-full transition-all duration-100 group-hover:brightness-110"
                 style={{ width: `${progress}%` }}
               />
             </div>
@@ -99,7 +99,7 @@ export const CinematicAudioPlayer: React.FC = () => {
             <button
               onClick={prevTrack}
               aria-label="Previous soundtrack"
-              className="p-2 rounded-full text-neutral-300 hover:text-[#d4af37] hover:bg-white/5 transition-all cursor-pointer"
+              className="p-2 rounded-full text-neutral-300 hover:text-[#8E1624] hover:bg-white/5 transition-all cursor-pointer"
             >
               <SkipBack className="w-4 h-4" />
             </button>
@@ -108,7 +108,7 @@ export const CinematicAudioPlayer: React.FC = () => {
             <button
               onClick={togglePlay}
               aria-label={isPlaying ? 'Pause music' : 'Play music'}
-              className="px-4 py-2 rounded-full bg-gradient-to-r from-[#8b1e2b] to-[#a32233] text-white hover:brightness-110 shadow-lg flex items-center gap-2 text-xs font-sans font-medium transition-all cursor-pointer border border-[#d4af37]/40"
+              className="px-4 py-2 rounded-full bg-[#8E1624] hover:bg-[#A81E2E] text-white hover:brightness-110 shadow-lg flex items-center gap-2 text-xs font-sans font-medium transition-all cursor-pointer border border-[#4F0D15]"
             >
               {isPlaying ? (
                 <>
@@ -127,7 +127,7 @@ export const CinematicAudioPlayer: React.FC = () => {
             <button
               onClick={nextTrack}
               aria-label="Next soundtrack"
-              className="p-2 rounded-full text-neutral-300 hover:text-[#d4af37] hover:bg-white/5 transition-all cursor-pointer"
+              className="p-2 rounded-full text-neutral-300 hover:text-[#8E1624] hover:bg-white/5 transition-all cursor-pointer"
             >
               <SkipForward className="w-4 h-4" />
             </button>
@@ -136,9 +136,9 @@ export const CinematicAudioPlayer: React.FC = () => {
             <button
               onClick={toggleMute}
               aria-label={isMuted ? 'Unmute music' : 'Mute music'}
-              className="p-2 rounded-full text-neutral-300 hover:text-[#d4af37] hover:bg-white/5 transition-all cursor-pointer"
+              className="p-2 rounded-full text-neutral-300 hover:text-[#8E1624] hover:bg-white/5 transition-all cursor-pointer"
             >
-              {isMuted ? <VolumeX className="w-4 h-4 text-neutral-400" /> : <Volume2 className="w-4 h-4 text-[#d4af37]" />}
+              {isMuted ? <VolumeX className="w-4 h-4 text-neutral-400" /> : <Volume2 className="w-4 h-4 text-[#8E1624]" />}
             </button>
           </div>
 
@@ -150,7 +150,7 @@ export const CinematicAudioPlayer: React.FC = () => {
                 onClick={() => playTrack(idx)}
                 className={`px-2.5 py-1 rounded-full text-[10px] font-sans whitespace-nowrap transition-all cursor-pointer border ${
                   idx === currentTrackIndex
-                    ? 'bg-[#d4af37]/20 border-[#d4af37] text-[#fbf8f2]'
+                    ? 'bg-[#8E1624]/20 border-[#8E1624] text-white'
                     : 'bg-white/5 border-white/10 text-neutral-400 hover:text-white'
                 }`}
               >
@@ -162,7 +162,7 @@ export const CinematicAudioPlayer: React.FC = () => {
       )}
 
       {/* COMPACT FLOATING PILL */}
-      <div className="bg-[#18111b]/85 backdrop-blur-md border border-[#d4af37]/30 hover:border-[#d4af37]/60 rounded-full px-3.5 py-2 shadow-2xl flex items-center gap-3 transition-all duration-300">
+      <div className="bg-[#171717]/90 backdrop-blur-md border border-[#303030] hover:border-[#8E1624]/50 rounded-full px-3.5 py-2 shadow-2xl flex items-center gap-3 transition-all duration-300">
         {/* Equalizer Visualizer Bars */}
         <div
           className="flex items-end gap-[3px] h-4 w-5 px-0.5 cursor-pointer"
@@ -172,7 +172,7 @@ export const CinematicAudioPlayer: React.FC = () => {
           {frequencyData.map((bar, i) => (
             <div
               key={i}
-              className="w-[3px] bg-[#d4af37] rounded-full transition-all duration-75"
+              className="w-[3px] bg-[#8E1624] rounded-full transition-all duration-75"
               style={{
                 height: isPlaying ? `${Math.max(20, bar * 100)}%` : '25%',
                 opacity: isPlaying ? 0.9 : 0.4,
@@ -187,10 +187,10 @@ export const CinematicAudioPlayer: React.FC = () => {
           className="text-left flex flex-col justify-center max-w-[120px] sm:max-w-[160px] cursor-pointer"
           aria-label="Toggle player drawer"
         >
-          <span className="font-serif text-xs text-[#fbf8f2] truncate block">
+          <span className="font-serif text-xs text-white truncate block">
             {currentTrack.title}
           </span>
-          <span className="text-[9px] font-sans text-[#d4af37]/90 truncate block">
+          <span className="text-[9px] font-sans text-[#8E1624] truncate block">
             {isPlaying ? 'Playing • Web Audio' : 'Paused'}
           </span>
         </button>
@@ -199,7 +199,7 @@ export const CinematicAudioPlayer: React.FC = () => {
         <button
           onClick={togglePlay}
           aria-label={isPlaying ? 'Pause music' : 'Play music'}
-          className="p-1.5 rounded-full bg-white/10 hover:bg-[#d4af37] text-white hover:text-black transition-all cursor-pointer"
+          className="p-1.5 rounded-full bg-white/10 hover:bg-[#8E1624] text-white transition-all cursor-pointer"
         >
           {isPlaying ? (
             <Pause className="w-3.5 h-3.5 fill-current" />

@@ -121,12 +121,12 @@ export const MemoryLightbox: React.FC<MemoryLightboxProps> = ({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="pointer-events-auto flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-xs text-neutral-300 font-sans shadow-lg">
-          <Sparkles className="w-3.5 h-3.5 text-[#d4af37]" />
+          <Sparkles className="w-3.5 h-3.5 text-[#8E1624]" />
           <span>
             {currentIndex + 1} of {memories.length}
           </span>
           <span className="text-white/40">•</span>
-          <span className="text-[#fbf8f2] font-serif italic hidden sm:inline">
+          <span className="text-white font-serif italic hidden sm:inline">
             {memory.title}
           </span>
         </div>
@@ -134,7 +134,7 @@ export const MemoryLightbox: React.FC<MemoryLightboxProps> = ({
         <button
           onClick={onClose}
           aria-label="Close memory modal (Escape)"
-          className="pointer-events-auto flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-white hover:text-[#d4af37] transition-all cursor-pointer group shadow-lg"
+          className="pointer-events-auto flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-white hover:text-[#8E1624] transition-all cursor-pointer group shadow-lg"
         >
           <span className="text-xs font-sans tracking-wide hidden sm:inline">Close</span>
           <X className="w-4 h-4 transition-transform group-hover:rotate-90 duration-300" />
@@ -151,7 +151,7 @@ export const MemoryLightbox: React.FC<MemoryLightboxProps> = ({
           type="button"
           onClick={handlePrev}
           aria-label="Previous photograph (Left Arrow)"
-          className="absolute -left-3 sm:-left-14 top-1/2 -translate-y-1/2 p-2.5 sm:p-3 rounded-full bg-black/70 hover:bg-[#d4af37] text-white hover:text-black border border-white/20 hover:border-[#d4af37] transition-all shadow-2xl cursor-pointer z-30 group"
+          className="absolute -left-3 sm:-left-14 top-1/2 -translate-y-1/2 p-2.5 sm:p-3 rounded-full bg-black/70 hover:bg-[#8E1624] text-white hover:text-white border border-white/20 hover:border-[#8E1624] transition-all shadow-2xl cursor-pointer z-30 group"
         >
           <ChevronLeft className="w-5 h-5 transition-transform group-hover:-translate-x-0.5" />
         </button>
@@ -161,7 +161,7 @@ export const MemoryLightbox: React.FC<MemoryLightboxProps> = ({
           type="button"
           onClick={handleNext}
           aria-label="Next photograph (Right Arrow)"
-          className="absolute -right-3 sm:-right-14 top-1/2 -translate-y-1/2 p-2.5 sm:p-3 rounded-full bg-black/70 hover:bg-[#d4af37] text-white hover:text-black border border-white/20 hover:border-[#d4af37] transition-all shadow-2xl cursor-pointer z-30 group"
+          className="absolute -right-3 sm:-right-14 top-1/2 -translate-y-1/2 p-2.5 sm:p-3 rounded-full bg-black/70 hover:bg-[#8E1624] text-white hover:text-white border border-white/20 hover:border-[#8E1624] transition-all shadow-2xl cursor-pointer z-30 group"
         >
           <ChevronRight className="w-5 h-5 transition-transform group-hover:translate-x-0.5" />
         </button>
@@ -180,27 +180,27 @@ export const MemoryLightbox: React.FC<MemoryLightboxProps> = ({
           aria-label="Polaroid memory card. Click to flip."
         >
           {/* ================= FRONT OF POLAROID ================= */}
-          <div className="absolute inset-0 bg-[#fbf8f2] text-[#2b231e] rounded-xl p-4 sm:p-6 shadow-2xl backface-hidden flex flex-col justify-between border border-[#e2d8c7]">
+          <div className="absolute inset-0 bg-[#FFFFFF] text-[#171717] rounded-xl p-4 sm:p-6 shadow-2xl backface-hidden flex flex-col justify-between border border-[#F2EFEB]">
             {/* Top Washi Tape Strip */}
-            <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 w-32 h-6 bg-gradient-to-r from-[#d4af37]/40 via-[#f4e29b]/60 to-[#d4af37]/40 border-y border-[#d4af37]/50 shadow-sm backdrop-blur-sm pointer-events-none flex items-center justify-center">
-              <span className="font-sans text-[8px] uppercase tracking-widest text-[#422e0a] font-bold">
+            <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 w-32 h-6 bg-[#F2EFEB] border-y border-[#71717A]/30 shadow-sm backdrop-blur-sm pointer-events-none flex items-center justify-center">
+              <span className="font-sans text-[8px] uppercase tracking-widest text-[#303030] font-bold">
                 {memory.stampText || 'KEEPSAKE ARCHIVE'}
               </span>
             </div>
 
-            {/* Vintage Brass Corner Clips */}
-            <div className="absolute top-3 left-3 w-3 h-3 border-t-2 border-l-2 border-[#b38f2b]/50 pointer-events-none" />
-            <div className="absolute top-3 right-3 w-3 h-3 border-t-2 border-r-2 border-[#b38f2b]/50 pointer-events-none" />
+            {/* Subtle Corner Clips */}
+            <div className="absolute top-3 left-3 w-3 h-3 border-t-2 border-l-2 border-[#303030]/25 pointer-events-none" />
+            <div className="absolute top-3 right-3 w-3 h-3 border-t-2 border-r-2 border-[#303030]/25 pointer-events-none" />
 
             {/* Large Photo Display */}
             <div className="relative w-full h-[310px] sm:h-[370px] md:h-[400px] bg-neutral-900 rounded-sm overflow-hidden shadow-inner">
               {failedImages[currentIndex] ? (
-                <div className="w-full h-full flex flex-col items-center justify-center p-6 bg-gradient-to-br from-[#1d161f] via-[#281b25] to-[#140e15] text-[#d4af37]/80 text-center select-none border border-[#d4af37]/20">
-                  <Sparkles className="w-8 h-8 mb-3 text-[#d4af37]/70 animate-pulse" />
-                  <span className="font-serif text-lg sm:text-xl text-[#fbf8f2] tracking-wide mb-1 px-4">
+                <div className="w-full h-full flex flex-col items-center justify-center p-6 bg-[#F2EFEB] text-[#71717A] text-center select-none border border-[#F2EFEB]">
+                  <Sparkles className="w-8 h-8 mb-3 text-[#8E1624] animate-pulse" />
+                  <span className="font-serif text-lg sm:text-xl text-[#171717] tracking-wide mb-1 px-4">
                     {memory.title}
                   </span>
-                  <span className="font-sans text-[11px] uppercase tracking-widest text-[#d4af37]/60">
+                  <span className="font-sans text-[11px] uppercase tracking-widest text-[#71717A]">
                     Archival Keepsake
                   </span>
                 </div>
@@ -216,7 +216,7 @@ export const MemoryLightbox: React.FC<MemoryLightboxProps> = ({
 
               {/* Location Pill */}
               <div className="absolute bottom-3 left-3 flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/65 backdrop-blur-md text-white text-xs font-sans border border-white/10 shadow-sm">
-                <MapPin className="w-3.5 h-3.5 text-[#d4af37]" />
+                <MapPin className="w-3.5 h-3.5 text-[#8E1624]" />
                 <span>{memory.location}</span>
               </div>
 
@@ -230,16 +230,16 @@ export const MemoryLightbox: React.FC<MemoryLightboxProps> = ({
 
             {/* Polaroid Bottom Note Area */}
             <div className="mt-4 flex flex-col items-center text-center">
-              <h3 className="font-serif text-xl sm:text-2xl text-[#231b14] font-medium tracking-tight">
+              <h3 className="font-serif text-xl sm:text-2xl text-[#171717] font-medium tracking-tight">
                 {memory.title}
               </h3>
-              <p className="font-editorial italic text-sm sm:text-base text-neutral-700 mt-1 max-w-md">
+              <p className="font-editorial italic text-sm sm:text-base text-[#71717A] mt-1 max-w-md">
                 "{memory.caption}"
               </p>
 
-              <div className="mt-3 flex items-center justify-between w-full pt-2.5 border-t border-[#2b231e]/15 text-xs text-neutral-500 font-sans">
+              <div className="mt-3 flex items-center justify-between w-full pt-2.5 border-t border-[#171717]/10 text-xs text-[#71717A] font-sans">
                 <span className="flex items-center gap-1.5">
-                  <Calendar className="w-3.5 h-3.5 text-[#8b1e2b]" />
+                  <Calendar className="w-3.5 h-3.5 text-[#8E1624]" />
                   {memory.date}
                 </span>
 
@@ -249,7 +249,7 @@ export const MemoryLightbox: React.FC<MemoryLightboxProps> = ({
                     e.stopPropagation();
                     handleFlip();
                   }}
-                  className="inline-flex items-center gap-1.5 text-[#8b1e2b] font-medium hover:text-[#5c131c] transition-colors cursor-pointer group"
+                  className="inline-flex items-center gap-1.5 text-[#8E1624] font-medium hover:text-[#4F0D15] transition-colors cursor-pointer group"
                 >
                   <RotateCw className="w-3.5 h-3.5 transition-transform group-hover:rotate-180 duration-500" />
                   <span>Flip to read note</span>
@@ -260,43 +260,43 @@ export const MemoryLightbox: React.FC<MemoryLightboxProps> = ({
 
           {/* ================= BACK OF POLAROID (Handwritten Note) ================= */}
           <div
-            className="absolute inset-0 bg-[#f6f0e2] text-[#2b231e] rounded-xl p-6 sm:p-8 shadow-2xl backface-hidden flex flex-col justify-between border border-[#decbb0]"
+            className="absolute inset-0 bg-[#F9F8F5] text-[#171717] rounded-xl p-6 sm:p-8 shadow-2xl backface-hidden flex flex-col justify-between border border-[#F2EFEB]"
             style={{
               transform: 'rotateY(180deg)',
             }}
           >
             {/* Top Postcard / Archival Header */}
-            <div className="flex items-center justify-between border-b border-[#2b231e]/15 pb-3">
+            <div className="flex items-center justify-between border-b border-[#171717]/10 pb-3">
               <div className="flex items-center gap-2">
-                <span className="font-serif italic text-xs tracking-wider text-[#8b1e2b] font-semibold uppercase">
+                <span className="font-serif italic text-xs tracking-wider text-[#8E1624] font-semibold uppercase">
                   Confidential Memory • {memory.location}
                 </span>
               </div>
-              <div className="flex items-center gap-1.5 px-2 py-0.5 rounded border border-[#8b1e2b]/30 bg-[#8b1e2b]/5 text-[#8b1e2b] text-[10px] font-sans">
-                <Heart className="w-3 h-3 fill-[#8b1e2b]" />
+              <div className="flex items-center gap-1.5 px-2 py-0.5 rounded border border-[#8E1624]/30 bg-[#8E1624]/5 text-[#8E1624] text-[10px] font-sans">
+                <Heart className="w-3 h-3 fill-[#8E1624]" />
                 <span>FOR YOUR EYES ONLY</span>
               </div>
             </div>
 
             {/* Vintage Postmark Stamp (Right Side Watermark) */}
             <div className="my-auto relative py-6">
-              <div className="absolute right-2 top-1/2 -translate-y-1/2 w-32 h-32 rounded-full border-2 border-dashed border-[#8b1e2b]/15 pointer-events-none flex items-center justify-center -rotate-12">
-                <span className="font-sans text-[9px] uppercase tracking-widest text-[#8b1e2b]/30 text-center font-bold">
+              <div className="absolute right-2 top-1/2 -translate-y-1/2 w-32 h-32 rounded-full border-2 border-dashed border-[#8E1624]/15 pointer-events-none flex items-center justify-center -rotate-12">
+                <span className="font-sans text-[9px] uppercase tracking-widest text-[#8E1624]/30 text-center font-bold">
                   OFFICIAL KEEPSAKE<br />ARCHIVE • SEALED
                 </span>
               </div>
 
               {/* Handwritten Note Content */}
-              <p className="font-handwriting text-2xl sm:text-3xl md:text-4xl text-[#231b14] leading-relaxed relative z-10 px-2 sm:px-4">
+              <p className="font-handwriting text-2xl sm:text-3xl md:text-4xl text-[#171717] leading-relaxed relative z-10 px-2 sm:px-4">
                 "{memory.handwrittenNote}"
               </p>
             </div>
 
             {/* Bottom Details & Flip Back Button */}
-            <div className="pt-3.5 border-t border-[#2b231e]/15 flex items-center justify-between text-xs text-neutral-600 font-sans">
+            <div className="pt-3.5 border-t border-[#171717]/10 flex items-center justify-between text-xs text-[#71717A] font-sans">
               <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
-                <span className="font-mono text-[11px] text-neutral-500">{memory.date}</span>
-                <span className="text-[#8b1e2b] font-medium italic text-[11px]">Julian & Elena</span>
+                <span className="font-mono text-[11px] text-[#71717A]">{memory.date}</span>
+                <span className="text-[#8E1624] font-medium italic text-[11px]">Julian & Elena</span>
               </div>
 
               <button
@@ -305,7 +305,7 @@ export const MemoryLightbox: React.FC<MemoryLightboxProps> = ({
                   e.stopPropagation();
                   handleFlip();
                 }}
-                className="inline-flex items-center gap-1.5 text-[#8b1e2b] font-medium hover:text-[#5c131c] transition-colors cursor-pointer group"
+                className="inline-flex items-center gap-1.5 text-[#8E1624] font-medium hover:text-[#4F0D15] transition-colors cursor-pointer group"
               >
                 <RotateCw className="w-3.5 h-3.5 transition-transform group-hover:-rotate-180 duration-500" />
                 <span>Return to photograph</span>

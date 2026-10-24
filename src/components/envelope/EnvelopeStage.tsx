@@ -314,20 +314,20 @@ export const EnvelopeStage: React.FC<EnvelopeStageProps> = ({
         <div 
           className="absolute w-[460px] sm:w-[620px] h-[460px] sm:h-[620px] rounded-full pointer-events-none -z-10"
           style={{
-            background: 'radial-gradient(circle, rgba(212, 175, 55, 0.07) 0%, rgba(139, 30, 43, 0.035) 50%, transparent 75%)',
+            background: 'radial-gradient(circle, rgba(142, 22, 36, 0.04) 0%, rgba(242, 239, 235, 0.6) 50%, transparent 75%)',
             filter: 'blur(55px)',
           }}
         />
 
         {/* Editorial Scene Header */}
         <div ref={headerRef} className="text-center mb-6 sm:mb-8 max-w-xl transition-all duration-700 pointer-events-none">
-          <span className="font-sans text-[11px] uppercase tracking-[0.25em] text-[#d4af37]/85 font-medium block mb-2">
+          <span className="font-sans text-[11px] uppercase tracking-[0.25em] text-[#8E1624] font-semibold block mb-2">
             Anniversary Epistle
           </span>
-          <h1 className="font-serif text-3xl sm:text-5xl font-light tracking-wide text-[#fbf8f2] mb-2 leading-tight">
-            {partner1} <span className="font-script text-[#d4af37] text-4xl sm:text-6xl mx-1.5">&</span> {partner2}
+          <h1 className="font-serif text-3xl sm:text-5xl font-light tracking-wide text-[#171717] mb-2 leading-tight">
+            {partner1} <span className="font-editorial italic text-[#8E1624] text-3xl sm:text-5xl mx-1.5">&</span> {partner2}
           </h1>
-          <p className="font-editorial text-base sm:text-xl text-neutral-400 italic tracking-wide">
+          <p className="font-editorial text-base sm:text-xl text-[#71717A] italic tracking-wide">
             "{tagline}"
           </p>
         </div>
@@ -341,14 +341,14 @@ export const EnvelopeStage: React.FC<EnvelopeStageProps> = ({
           <div className="absolute -bottom-6 sm:-bottom-8 left-1/2 -translate-x-1/2 w-[88%] h-8 bg-black/60 rounded-full blur-xl pointer-events-none" />
 
           {/* Envelope Shell Body */}
-          <div className="relative w-full h-full bg-[#1b131c] rounded-xl paper-shadow border border-[#d4af37]/25 flex items-center justify-center overflow-visible">
+          <div className="relative w-full h-full bg-[#171717] rounded-xl paper-shadow border border-[#303030] flex items-center justify-center overflow-visible">
             
             {/* Inner Pocket Felt / Silk Lining */}
-            <div className="absolute inset-2 rounded-lg bg-[#120b13] border border-[#d4af37]/10 overflow-hidden">
+            <div className="absolute inset-2 rounded-lg bg-[#09090A] border border-[#303030]/40 overflow-hidden">
               <div 
                 className="w-full h-full opacity-20"
                 style={{
-                  backgroundImage: 'radial-gradient(#d4af37 1px, transparent 1px)',
+                  backgroundImage: 'radial-gradient(rgba(142, 22, 36, 0.25) 1px, transparent 1px)',
                   backgroundSize: '16px 16px',
                 }}
               />
@@ -363,7 +363,7 @@ export const EnvelopeStage: React.FC<EnvelopeStageProps> = ({
             {/* FOLDED PARCHMENT LETTER */}
             <div
               ref={letterRef}
-              className="absolute bottom-2.5 w-[92%] sm:w-[93%] h-[88%] bg-[#fcf9f2] text-[#2b231e] rounded-lg paper-shadow p-4 sm:p-6 flex flex-col justify-between"
+              className="absolute bottom-2.5 w-[92%] sm:w-[93%] h-[88%] bg-[#F9F8F5] text-[#171717] rounded-lg paper-shadow p-4 sm:p-6 flex flex-col justify-between border border-[#F2EFEB]"
               style={{
                 transformStyle: 'preserve-3d',
               }}
@@ -378,11 +378,11 @@ export const EnvelopeStage: React.FC<EnvelopeStageProps> = ({
                   ref={creaseShadowTopRef}
                   className="absolute inset-0 crease-shadow-top pointer-events-none z-10"
                 />
-                <div ref={epistleRibbonRef} className="flex items-center justify-between border-b border-[#2b231e]/15 pb-2 mb-2">
-                  <span className="font-editorial italic text-xs tracking-widest text-[#8b1e2b] font-semibold">
+                <div ref={epistleRibbonRef} className="flex items-center justify-between border-b border-[#171717]/10 pb-2 mb-2">
+                  <span className="font-editorial italic text-xs tracking-widest text-[#8E1624] font-semibold">
                     A Keepsake Letter Across Time
                   </span>
-                  <span className="font-sans text-[10px] tracking-widest uppercase text-neutral-500">
+                  <span className="font-sans text-[10px] tracking-widest uppercase text-[#71717A]">
                     {formattedDate}
                   </span>
                 </div>
@@ -392,7 +392,7 @@ export const EnvelopeStage: React.FC<EnvelopeStageProps> = ({
               <div className="flex-1 flex flex-col justify-center text-center my-1">
                 {/* Salutation */}
                 <div ref={salutationRef}>
-                  <span className="font-script text-3xl sm:text-4xl text-[#8b1e2b] mb-1.5 block">
+                  <span className="font-handwriting text-3xl sm:text-4xl text-[#8E1624] mb-1.5 block">
                     {openingLetter?.salutation || `Dearest ${partner2},`}
                   </span>
                 </div>
@@ -400,7 +400,7 @@ export const EnvelopeStage: React.FC<EnvelopeStageProps> = ({
                 {/* Staggered Line 1 */}
                 <p 
                   ref={line1Ref} 
-                  className="font-editorial text-sm sm:text-base text-[#2b231e] leading-relaxed italic max-w-sm mx-auto"
+                  className="font-editorial text-sm sm:text-base text-[#171717] leading-relaxed italic max-w-sm mx-auto"
                 >
                   {openingLetter?.lines?.[0] || 'Every year with you unfolds like a romance I never want to put down.'}
                 </p>
@@ -408,7 +408,7 @@ export const EnvelopeStage: React.FC<EnvelopeStageProps> = ({
                 {/* Staggered Line 2 */}
                 <p 
                   ref={line2Ref} 
-                  className="font-editorial text-xs sm:text-sm text-neutral-600 leading-relaxed italic max-w-sm mx-auto mt-1"
+                  className="font-editorial text-xs sm:text-sm text-[#71717A] leading-relaxed italic max-w-sm mx-auto mt-1"
                 >
                   {openingLetter?.lines?.[1] || 'From quiet sunrise tea to late-night highway melodies, you are my home.'}
                 </p>
@@ -416,20 +416,20 @@ export const EnvelopeStage: React.FC<EnvelopeStageProps> = ({
                 {/* Staggered Line 3 */}
                 <p 
                   ref={line3Ref} 
-                  className="font-editorial text-xs sm:text-sm text-neutral-600 leading-relaxed italic max-w-sm mx-auto mt-1"
+                  className="font-editorial text-xs sm:text-sm text-[#71717A] leading-relaxed italic max-w-sm mx-auto mt-1"
                 >
                   {openingLetter?.lines?.[2] || 'Walk with me through our memories, our songs, and all our tomorrows.'}
                 </p>
 
                 {/* Closing & Flourish Signature */}
                 <div ref={closingRef} className="mt-2.5 flex flex-col items-center">
-                  <span ref={signatureRef} className="font-script text-2xl text-[#8b1e2b]">
+                  <span ref={signatureRef} className="font-handwriting text-2xl sm:text-3xl text-[#8E1624]">
                     {openingLetter?.closing || 'Always yours,'} {openingLetter?.signature || partner1}
                   </span>
                   
                   {/* Subtle Botanical SVG Flourish under signature */}
                   <svg 
-                    className="w-24 h-4 text-[#d4af37] opacity-80 mt-0.5 overflow-visible" 
+                    className="w-24 h-4 text-[#8E1624] opacity-80 mt-0.5 overflow-visible" 
                     viewBox="0 0 140 20" 
                     fill="none"
                   >
@@ -454,8 +454,8 @@ export const EnvelopeStage: React.FC<EnvelopeStageProps> = ({
                   ref={creaseShadowBottomRef}
                   className="absolute inset-0 crease-shadow-bottom pointer-events-none z-10"
                 />
-                <div ref={unfoldedHintRef} className="pt-2 border-t border-[#2b231e]/10 text-center">
-                  <span className="font-sans text-[10px] tracking-widest uppercase text-[#8b1e2b] font-medium">
+                <div ref={unfoldedHintRef} className="pt-2 border-t border-[#171717]/10 text-center">
+                  <span className="font-sans text-[10px] tracking-widest uppercase text-[#8E1624] font-medium">
                     {invitation?.unfoldedHint || 'Scroll down to explore our story ↓'}
                   </span>
                 </div>
@@ -466,21 +466,21 @@ export const EnvelopeStage: React.FC<EnvelopeStageProps> = ({
             <div className="absolute inset-0 z-25 pointer-events-none">
               {/* Left Pocket Flap */}
               <div
-                className="absolute inset-0 bg-[#251a23] rounded-xl border border-[#d4af37]/20 shadow-md"
+                className="absolute inset-0 bg-[#171717] rounded-xl border border-[#303030] shadow-md"
                 style={{
                   clipPath: 'polygon(0% 0%, 50% 50%, 0% 100%)',
                 }}
               />
               {/* Right Pocket Flap */}
               <div
-                className="absolute inset-0 bg-[#221720] rounded-xl border border-[#d4af37]/20 shadow-md"
+                className="absolute inset-0 bg-[#141416] rounded-xl border border-[#303030] shadow-md"
                 style={{
                   clipPath: 'polygon(100% 0%, 50% 50%, 100% 100%)',
                 }}
               />
               {/* Bottom Pocket Flap */}
               <div
-                className="absolute inset-0 bg-[#291c26] rounded-xl border-t border-[#d4af37]/30 shadow-inner"
+                className="absolute inset-0 bg-[#1F1F22] rounded-xl border-t border-[#303030] shadow-inner"
                 style={{
                   clipPath: 'polygon(0% 100%, 50% 48%, 100% 100%)',
                 }}
@@ -498,7 +498,7 @@ export const EnvelopeStage: React.FC<EnvelopeStageProps> = ({
             >
               {/* Outer Flap Surface (Visible when closed) */}
               <div
-                className="w-full h-full bg-gradient-to-b from-[#342431] to-[#261a24] rounded-t-xl border border-[#d4af37]/30 backface-hidden shadow-xl"
+                className="w-full h-full bg-gradient-to-b from-[#303030] to-[#171717] rounded-t-xl border border-[#303030] backface-hidden shadow-xl"
                 style={{
                   clipPath: 'polygon(0% 0%, 100% 0%, 50% 100%)',
                 }}
@@ -506,7 +506,7 @@ export const EnvelopeStage: React.FC<EnvelopeStageProps> = ({
 
               {/* Reverse Flap Surface (Visible when rotated 180deg) */}
               <div
-                className="absolute inset-0 bg-gradient-to-t from-[#20141e] to-[#2c1d29] rounded-b-xl border border-[#d4af37]/20 shadow-inner"
+                className="absolute inset-0 bg-gradient-to-t from-[#141416] to-[#26262A] rounded-b-xl border border-[#303030] shadow-inner"
                 style={{
                   clipPath: 'polygon(0% 100%, 100% 100%, 50% 0%)',
                   transform: 'rotateX(180deg)',
@@ -539,13 +539,13 @@ export const EnvelopeStage: React.FC<EnvelopeStageProps> = ({
           aria-label="Scroll down or click to open letter"
           className="mt-8 sm:mt-10 flex flex-col items-center gap-2 cursor-pointer transition-transform duration-300 hover:scale-105"
         >
-          <span className="font-sans text-xs uppercase tracking-[0.2em] text-[#d4af37]/90 font-medium">
+          <span className="font-sans text-xs uppercase tracking-[0.2em] text-[#71717A] font-medium">
             {invitation?.scrollPrompt || 'Scroll to Unfold'}
           </span>
-          <div className="w-5 h-8 rounded-full border border-[#d4af37]/40 flex items-start justify-center p-1">
-            <div className="w-1 h-2 rounded-full bg-[#d4af37] animate-bounce" />
+          <div className="w-5 h-8 rounded-full border border-[#303030]/40 flex items-start justify-center p-1">
+            <div className="w-1 h-2 rounded-full bg-[#8E1624] animate-bounce" />
           </div>
-          <span className="font-editorial text-xs italic text-neutral-400">
+          <span className="font-editorial text-xs italic text-[#71717A]">
             {invitation?.tapSealPrompt || '(or tap the wax seal)'}
           </span>
         </div>

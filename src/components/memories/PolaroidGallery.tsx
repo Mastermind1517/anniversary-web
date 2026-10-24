@@ -119,40 +119,40 @@ export const PolaroidGallery: React.FC<PolaroidGalleryProps> = ({ memories, onOp
     <section
       id="memories-section"
       ref={galleryRef}
-      className="relative w-full py-28 px-4 sm:px-8 md:px-12 overflow-hidden z-10 selection:bg-[#d4af37]/30"
+      className="relative w-full py-28 px-4 sm:px-8 md:px-12 overflow-hidden z-10 selection:bg-[#8E1624]/15"
     >
       {/* Background Atmosphere & Subtle Paper Grain */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#140e18]/60 to-transparent pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#F2EFEB]/30 to-transparent pointer-events-none" />
 
       {/* Archival Compass Rose / Botanical Background Watermark */}
-      <div className="gallery-watermark absolute top-40 right-10 w-96 h-96 rounded-full border border-[#d4af37]/10 pointer-events-none flex items-center justify-center opacity-30 select-none">
-        <Compass className="w-80 h-80 text-[#d4af37]/15 stroke-1 animate-[spin_120s_linear_infinite]" />
+      <div className="gallery-watermark absolute top-40 right-10 w-96 h-96 rounded-full border border-[#303030]/10 pointer-events-none flex items-center justify-center opacity-30 select-none">
+        <Compass className="w-80 h-80 text-[#71717A]/15 stroke-1 animate-[spin_120s_linear_infinite]" />
       </div>
 
-      <div className="gallery-watermark absolute bottom-40 -left-20 w-[480px] h-[480px] rounded-full border border-[#d4af37]/10 pointer-events-none flex items-center justify-center opacity-25 select-none">
-        <div className="w-[440px] h-[440px] rounded-full border border-dashed border-[#8b1e2b]/15" />
+      <div className="gallery-watermark absolute bottom-40 -left-20 w-[480px] h-[480px] rounded-full border border-[#303030]/10 pointer-events-none flex items-center justify-center opacity-25 select-none">
+        <div className="w-[440px] h-[440px] rounded-full border border-dashed border-[#8E1624]/15" />
       </div>
 
       {/* Editorial Section Header */}
       <div className="text-center max-w-3xl mx-auto mb-20 relative z-10">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#d4af37]/10 border border-[#d4af37]/25 text-[#d4af37] text-xs font-sans uppercase tracking-widest mb-3.5 shadow-sm">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#8E1624]/10 border border-[#8E1624]/20 text-[#8E1624] text-xs font-sans uppercase tracking-widest mb-3.5 shadow-sm">
           <Camera className="w-3.5 h-3.5" />
           <span>Chapter II • Visual Anthology</span>
         </div>
 
-        <h2 className="font-serif text-3xl sm:text-5xl md:text-6xl font-light text-[#fbf8f2] tracking-wide mb-4">
+        <h2 className="font-serif text-3xl sm:text-5xl md:text-6xl font-light text-[#171717] tracking-wide mb-4">
           The Chronicle of Us
         </h2>
 
-        <p className="font-editorial text-lg sm:text-xl md:text-2xl text-neutral-300 italic max-w-2xl mx-auto leading-relaxed">
+        <p className="font-editorial text-lg sm:text-xl md:text-2xl text-[#71717A] italic max-w-2xl mx-auto leading-relaxed">
           Fragments of light captured across the years. Every photograph holds a private handwritten note
           inscribed on the back.
         </p>
 
-        <div className="flex items-center justify-center gap-2 mt-4 text-xs font-sans uppercase tracking-widest text-[#d4af37]/80">
-          <Sparkles className="w-3 h-3 text-[#d4af37]" />
+        <div className="flex items-center justify-center gap-2 mt-4 text-xs font-sans uppercase tracking-widest text-[#71717A]">
+          <Sparkles className="w-3 h-3 text-[#8E1624]" />
           <span>Tap or click any photograph to read its secret</span>
-          <Sparkles className="w-3 h-3 text-[#d4af37]" />
+          <Sparkles className="w-3 h-3 text-[#8E1624]" />
         </div>
       </div>
 
@@ -176,8 +176,8 @@ export const PolaroidGallery: React.FC<PolaroidGalleryProps> = ({ memories, onOp
 
           {/* Center Calligraphic Interlude */}
           <div className="hidden md:flex md:col-span-1 justify-center items-center">
-            <div className="h-44 w-[1px] bg-gradient-to-b from-transparent via-[#d4af37]/40 to-transparent relative">
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-[#d4af37]/60" />
+            <div className="h-44 w-[1px] bg-gradient-to-b from-transparent via-[#8E1624]/30 to-transparent relative">
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-[#8E1624]" />
             </div>
           </div>
 
@@ -197,19 +197,19 @@ export const PolaroidGallery: React.FC<PolaroidGalleryProps> = ({ memories, onOp
         </div>
 
         {/* Editorial Marginalia Quote & Curator Footnote Easter Egg */}
-        <div className="text-center py-4 border-y border-[#d4af37]/15 max-w-xl mx-auto relative group">
+        <div className="text-center py-4 border-y border-[#F2EFEB] max-w-xl mx-auto relative group">
           <button
             onClick={onOpenFootnote}
             title="Inspect archival curator's secret footnote"
             aria-label="Inspect archival curator's secret footnote"
-            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[#d4af37]/80 hover:text-[#d4af37] bg-white/5 hover:bg-[#d4af37]/15 border border-[#d4af37]/20 transition-all cursor-pointer mb-2"
+            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[#71717A] hover:text-[#8E1624] bg-white hover:bg-[#F2EFEB] border border-[#F2EFEB] transition-all cursor-pointer mb-2 shadow-sm"
           >
             <Feather className="w-3.5 h-3.5 transition-transform group-hover:scale-110" />
-            <span className="text-[10px] font-sans uppercase tracking-widest text-[#d4af37]">
+            <span className="text-[10px] font-sans uppercase tracking-widest text-[#8E1624] font-medium">
               Secret Footnote
             </span>
           </button>
-          <p className="font-serif italic text-base sm:text-lg text-neutral-300">
+          <p className="font-serif italic text-base sm:text-lg text-[#71717A]">
             "We took photographs not to freeze time, but to remember how fiercely we loved being alive in it."
           </p>
         </div>
@@ -298,7 +298,7 @@ export const PolaroidGallery: React.FC<PolaroidGalleryProps> = ({ memories, onOp
               ref={(el) => { cardsRef.current[7] = el; }}
               className="w-full flex flex-col items-center"
             >
-              <div className="mb-4 inline-flex items-center gap-2 text-xs font-sans tracking-widest uppercase text-[#d4af37]">
+              <div className="mb-4 inline-flex items-center gap-2 text-xs font-sans tracking-widest uppercase text-[#8E1624]">
                 <Sparkles className="w-3.5 h-3.5" />
                 <span>The Present & Forever</span>
               </div>
@@ -307,7 +307,7 @@ export const PolaroidGallery: React.FC<PolaroidGalleryProps> = ({ memories, onOp
                 memory={memories[7]}
                 onClick={() => setSelectedMemoryIndex(7)}
                 index={7}
-                className="ring-1 ring-[#d4af37]/30 shadow-[0_25px_60px_-15px_rgba(212,175,55,0.25)]"
+                className="ring-1 ring-[#8E1624]/30 shadow-[0_25px_60px_-15px_rgba(23,23,23,0.1)]"
               />
             </div>
           )}

@@ -77,7 +77,7 @@ export const App: React.FC = () => {
 
   return (
     <AudioProvider tracks={anniversaryData.tracks}>
-      <div className="relative min-h-screen bg-[#0d0b0f] text-[#fbf8f2] selection:bg-[#d4af37]/30 selection:text-[#fbf8f2]">
+      <div className="relative min-h-screen bg-[#F9F8F5] text-[#171717] selection:bg-[#8E1624]/15 selection:text-[#8E1624]">
         {/* Ambient Canvas & Visual Overlays */}
         <AmbientCanvas />
         <NoiseOverlay />
@@ -161,10 +161,10 @@ export const App: React.FC = () => {
           title={activeSecretMessage?.title || ''}
           subtitle={activeSecretMessage?.subtitle}
           dateTag={activeSecretMessage?.dateTag}
-          icon={<Sparkles className="w-5 h-5 text-[#d4af37]" />}
+          icon={<Sparkles className="w-5 h-5 text-[#8E1624]" />}
         >
           <div className="py-2">
-            <p className="font-handwriting text-2xl sm:text-3xl text-[#231b14] leading-relaxed my-3 px-1 sm:px-2">
+            <p className="font-handwriting text-2xl sm:text-3xl text-[#171717] leading-relaxed my-3 px-1 sm:px-2">
               "{activeSecretMessage?.content}"
             </p>
           </div>

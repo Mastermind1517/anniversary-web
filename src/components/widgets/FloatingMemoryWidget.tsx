@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import type { HiddenMessage } from '../../types';
 import { sound } from '../audio/SoundEngine';
 import { Feather, X, Sparkles, Clock, BookOpen } from 'lucide-react';
@@ -20,39 +20,28 @@ export const FloatingMemoryWidget: React.FC<FloatingMemoryWidgetProps> = ({
   const [activeMessageIndex, setActiveMessageIndex] = useState(0);
   const widgetRef = useRef<HTMLDivElement | null>(null);
 
-  // Purely initialize elapsed days based on anniversaryDate on mount
-  const [elapsedDays] = useState<number>(() => {
+  // Calculate elapsed days
+  const [elapsedDays] = useState(() => {
     const start = new Date(anniversaryDate).getTime();
-    return Math.floor(Math.max(0, Date.now() - start) / (1000 * 60 * 60 * 24));
+    const now = new Date().getTime();
+    return Math.floor(Math.max(0, now - start) / (1000 * 60 * 60 * 24));
   });
 
-  // Close on Escape or click outside
+  // Handle outside click to close drawer
   useEffect(() => {
-    if (!isOpen) return;
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        setIsOpen(false);
-      }
-    };
-
-    const handleClickOutside = (e: MouseEvent) => {
+    const handleOutsideClick = (e: MouseEvent) => {
       if (widgetRef.current && !widgetRef.current.contains(e.target as Node)) {
         setIsOpen(false);
       }
     };
-
-    window.addEventListener('keydown', handleKeyDown);
-    document.addEventListener('mousedown', handleClickOutside);
-
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
+    if (isOpen) {
+      document.addEventListener('mousedown', handleOutsideClick);
+    }
+    return () => document.removeEventListener('mousedown', handleOutsideClick);
   }, [isOpen]);
 
   const toggleOpen = () => {
-    sound.playPaperRustle();
+    sound.playTapeClick();
     setIsOpen(!isOpen);
   };
 
@@ -70,55 +59,55 @@ export const FloatingMemoryWidget: React.FC<FloatingMemoryWidgetProps> = ({
     >
       {/* EXPANDED KEEPSAKE PANEL */}
       {isOpen && (
-        <div className="mb-3 w-[88vw] max-w-[320px] sm:max-w-[350px] bg-[#1a121e]/95 backdrop-blur-xl border border-[#d4af37]/40 rounded-2xl p-4 sm:p-5 shadow-2xl text-[#fbf8f2] animate-in fade-in zoom-in-95 duration-200">
+        <div className="mb-3 w-[88vw] max-w-[320px] sm:max-w-[350px] bg-white/95 backdrop-blur-xl border border-[#F2EFEB] rounded-2xl p-4 sm:p-5 shadow-2xl text-[#171717] animate-in fade-in zoom-in-95 duration-200">
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-[#d4af37]/20 pb-2.5 mb-3">
+          <div className="flex items-center justify-between border-b border-[#171717]/10 pb-2.5 mb-3">
             <div className="flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-[#d4af37]" />
-              <span className="font-serif text-sm font-medium tracking-wide text-[#fbf8f2]">
+              <Sparkles className="w-4 h-4 text-[#8E1624]" />
+              <span className="font-serif text-sm font-medium tracking-wide text-[#171717]">
                 Keepsake Companion
               </span>
             </div>
             <button
               onClick={() => setIsOpen(false)}
               aria-label="Close keepsake panel"
-              className="p-1 rounded-full text-neutral-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+              className="p-1 rounded-full text-[#71717A] hover:text-[#171717] hover:bg-black/5 transition-colors cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
           </div>
 
           {/* Elapsed Days Milestone Banner */}
-          <div className="bg-[#d4af37]/10 border border-[#d4af37]/25 rounded-xl p-3 mb-3.5 flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-[#d4af37]/15 text-[#d4af37]">
+          <div className="bg-[#F9F8F5] border border-[#F2EFEB] rounded-xl p-3 mb-3.5 flex items-center gap-3">
+            <div className="p-2 rounded-lg bg-[#8E1624]/10 text-[#8E1624]">
               <Clock className="w-4 h-4" />
             </div>
             <div>
-              <span className="font-mono text-base font-semibold text-[#fbf8f2] block leading-none">
+              <span className="font-mono text-base font-semibold text-[#171717] block leading-none">
                 {elapsedDays.toLocaleString()} Days
               </span>
-              <span className="font-editorial text-xs text-[#d4af37] italic">
+              <span className="font-editorial text-xs text-[#8E1624] italic">
                 of holding eternity in our hands
               </span>
             </div>
           </div>
 
           {/* Whispered Secret of the Moment */}
-          <div className="bg-black/40 border border-white/10 rounded-xl p-3.5 mb-3.5 relative">
-            <div className="flex items-center justify-between text-[10px] font-sans uppercase tracking-widest text-[#d4af37] mb-1.5">
+          <div className="bg-[#F9F8F5] border border-[#F2EFEB] rounded-xl p-3.5 mb-3.5 relative">
+            <div className="flex items-center justify-between text-[10px] font-sans uppercase tracking-widest text-[#8E1624] mb-1.5">
               <span>Whisper {activeMessageIndex + 1} of {hiddenMessages.length}</span>
               <button
                 onClick={nextWhisper}
-                className="hover:underline text-neutral-300 font-sans cursor-pointer text-[10px]"
+                className="hover:underline text-[#71717A] font-sans cursor-pointer text-[10px]"
               >
                 Next whisper →
               </button>
             </div>
 
-            <h5 className="font-serif text-xs font-semibold text-[#fbf8f2] mb-1">
+            <h5 className="font-serif text-xs font-semibold text-[#171717] mb-1">
               {currentMsg.title}
             </h5>
-            <p className="font-handwriting text-base text-neutral-300 line-clamp-3 leading-snug">
+            <p className="font-handwriting text-base text-[#171717] line-clamp-3 leading-snug">
               "{currentMsg.content}"
             </p>
 
@@ -127,7 +116,7 @@ export const FloatingMemoryWidget: React.FC<FloatingMemoryWidgetProps> = ({
                 setIsOpen(false);
                 onOpenMessageModal(currentMsg);
               }}
-              className="mt-2 text-[10px] font-sans text-[#d4af37] hover:underline inline-flex items-center gap-1 cursor-pointer"
+              className="mt-2 text-[10px] font-sans text-[#8E1624] hover:underline inline-flex items-center gap-1 cursor-pointer"
             >
               <BookOpen className="w-3 h-3" />
               <span>Read complete archival note</span>
@@ -136,7 +125,7 @@ export const FloatingMemoryWidget: React.FC<FloatingMemoryWidgetProps> = ({
 
           {/* Quick Scene Jumper Shortcuts */}
           <div>
-            <span className="font-sans text-[10px] uppercase tracking-widest text-neutral-400 block mb-2">
+            <span className="font-sans text-[10px] uppercase tracking-widest text-[#71717A] block mb-2">
               Chapter Navigation
             </span>
             <div className="grid grid-cols-2 gap-1.5 text-xs font-sans">
@@ -145,7 +134,7 @@ export const FloatingMemoryWidget: React.FC<FloatingMemoryWidgetProps> = ({
                   onScrollTo('memories-section');
                   setIsOpen(false);
                 }}
-                className="px-2.5 py-1.5 rounded-lg bg-white/5 hover:bg-[#d4af37]/20 border border-white/10 hover:border-[#d4af37] text-left transition-colors cursor-pointer text-[11px]"
+                className="px-2.5 py-1.5 rounded-lg bg-white hover:bg-[#F2EFEB] border border-[#F2EFEB] hover:border-[#8E1624]/40 text-left transition-colors cursor-pointer text-[11px] text-[#171717]"
               >
                 II • Chronicle
               </button>
@@ -154,7 +143,7 @@ export const FloatingMemoryWidget: React.FC<FloatingMemoryWidgetProps> = ({
                   onScrollTo('mixtape-section');
                   setIsOpen(false);
                 }}
-                className="px-2.5 py-1.5 rounded-lg bg-white/5 hover:bg-[#d4af37]/20 border border-white/10 hover:border-[#d4af37] text-left transition-colors cursor-pointer text-[11px]"
+                className="px-2.5 py-1.5 rounded-lg bg-white hover:bg-[#F2EFEB] border border-[#F2EFEB] hover:border-[#8E1624]/40 text-left transition-colors cursor-pointer text-[11px] text-[#171717]"
               >
                 III • Mixtape
               </button>
@@ -163,7 +152,7 @@ export const FloatingMemoryWidget: React.FC<FloatingMemoryWidgetProps> = ({
                   onScrollTo('notes-section');
                   setIsOpen(false);
                 }}
-                className="px-2.5 py-1.5 rounded-lg bg-white/5 hover:bg-[#d4af37]/20 border border-white/10 hover:border-[#d4af37] text-left transition-colors cursor-pointer text-[11px]"
+                className="px-2.5 py-1.5 rounded-lg bg-white hover:bg-[#F2EFEB] border border-[#F2EFEB] hover:border-[#8E1624]/40 text-left transition-colors cursor-pointer text-[11px] text-[#171717]"
               >
                 IV • Love Notes
               </button>
@@ -172,7 +161,7 @@ export const FloatingMemoryWidget: React.FC<FloatingMemoryWidgetProps> = ({
                   onScrollTo('constellation-section');
                   setIsOpen(false);
                 }}
-                className="px-2.5 py-1.5 rounded-lg bg-white/5 hover:bg-[#d4af37]/20 border border-white/10 hover:border-[#d4af37] text-left transition-colors cursor-pointer text-[11px]"
+                className="px-2.5 py-1.5 rounded-lg bg-white hover:bg-[#F2EFEB] border border-[#F2EFEB] hover:border-[#8E1624]/40 text-left transition-colors cursor-pointer text-[11px] text-[#171717]"
               >
                 V • Constellation
               </button>
@@ -185,17 +174,17 @@ export const FloatingMemoryWidget: React.FC<FloatingMemoryWidgetProps> = ({
       <button
         onClick={toggleOpen}
         aria-label={isOpen ? 'Close keepsake companion' : 'Open keepsake companion and whispered secrets'}
-        className={`w-12 h-12 rounded-full bg-gradient-to-br from-[#d4af37] via-[#b89327] to-[#8b1e2b] text-[#1b131c] shadow-[0_8px_25px_rgba(212,175,55,0.4)] hover:shadow-[0_12px_32px_rgba(212,175,55,0.6)] flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 cursor-pointer border border-[#f5e4a8]/50 relative group ${
+        className={`w-12 h-12 rounded-full bg-[#171717] text-white shadow-[0_8px_25px_rgba(23,23,23,0.25)] hover:shadow-[0_12px_32px_rgba(142,22,36,0.3)] flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 cursor-pointer border border-[#303030] hover:border-[#8E1624]/60 relative group ${
           isOpen ? 'rotate-90' : 'rotate-0'
         }`}
       >
         {/* Subtle breathing aura */}
-        <span className="absolute inset-0 rounded-full bg-[#d4af37]/30 animate-ping pointer-events-none" />
+        <span className="absolute inset-0 rounded-full bg-[#8E1624]/20 animate-ping pointer-events-none" />
 
         {isOpen ? (
           <X className="w-5 h-5 text-white" />
         ) : (
-          <Feather className="w-5 h-5 fill-current text-[#1b131c]" />
+          <Feather className="w-5 h-5 fill-current text-[#8E1624]" />
         )}
       </button>
     </div>

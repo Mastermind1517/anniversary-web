@@ -11,7 +11,7 @@ export interface MemoryItem {
   size?: 'hero' | 'featured' | 'standard' | 'compact';
   direction?: 'left' | 'right' | 'top' | 'bottom';
   parallaxSpeed?: number;
-  tapeStyle?: 'gold' | 'kraft' | 'vellum' | 'stamp';
+  tapeStyle?: 'kraft' | 'vellum' | 'stamp';
   stampText?: string;
   dateTag?: string;
 }

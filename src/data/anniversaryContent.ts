@@ -24,7 +24,7 @@ export const anniversaryData: AnniversaryData = {
   siteMetadata: {
     browserTitle: "Our Story — A Cinematic Anniversary Keepsake",
     metaDescription: "An intimate cinematic anniversary love letter, archival photographs, and constellation of cherished memories.",
-    themeColor: "#0d0b0f",
+    themeColor: "#F9F8F5",
   },
 
   // ---------------------------------------------------------------------------
@@ -82,7 +82,7 @@ export const anniversaryData: AnniversaryData = {
       size: 'featured',
       direction: 'left',
       parallaxSpeed: 0.12,
-      tapeStyle: 'gold',
+      tapeStyle: 'kraft',
       stampText: 'PARIS • 24.10.22',
     },
     {
@@ -133,7 +133,7 @@ export const anniversaryData: AnniversaryData = {
       size: 'standard',
       direction: 'top',
       parallaxSpeed: -0.08,
-      tapeStyle: 'gold',
+      tapeStyle: 'vellum',
       stampText: 'EX LIBRIS • ARCHIVE',
     },
     {
@@ -184,7 +184,7 @@ export const anniversaryData: AnniversaryData = {
       size: 'standard',
       direction: 'bottom',
       parallaxSpeed: 0.1,
-      tapeStyle: 'gold',
+      tapeStyle: 'kraft',
       stampText: 'SANCTUARY • WINTER',
     },
     {
@@ -406,7 +406,7 @@ export const anniversaryData: AnniversaryData = {
       source: "wax-seal",
       title: "The Monogram Inscription",
       subtitle: "Archival Seal • J & E",
-      content: "Engraved in crimson wax with burnished gold dust: 'J & E' signifies two separate wandering spirits who discovered that their favorite destination was simply each other.",
+      content: "Embossed in deep crimson wax: 'J & E' signifies two separate wandering spirits who discovered that their favorite destination was simply each other.",
       dateTag: "October 24, 2022",
     },
     {

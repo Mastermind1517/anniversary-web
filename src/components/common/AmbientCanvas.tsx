@@ -1,36 +1,36 @@
 import React from 'react';
 
 /**
- * Restrained, cinematic studio lighting background.
- * Soft overhead keylight with warm candlelight gradient falloff.
- * No excessive glows, zero random particles, zero distraction.
+ * Editorial studio background with subtle natural paper luminance.
+ * Dominated by Cotton Paper (#F9F8F5) with restrained Raw Linen (#F2EFEB) depth.
+ * Zero gold or purple; subtle and tactile.
  */
 export const AmbientCanvas: React.FC = () => {
   return (
-    <div className="fixed inset-0 pointer-events-none -z-10 overflow-hidden bg-[#0a080d]">
-      {/* Soft directional overhead key light focused toward center-top */}
+    <div className="fixed inset-0 pointer-events-none -z-10 overflow-hidden bg-[#F9F8F5]">
+      {/* Soft overhead keylight for warm editorial paper luminance */}
       <div 
-        className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[1200px] max-w-[140vw] h-[750px] opacity-60 pointer-events-none"
+        className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[1200px] max-w-[140vw] h-[750px] opacity-75 pointer-events-none"
         style={{
-          background: 'radial-gradient(ellipse 60% 45% at 50% 30%, rgba(212, 175, 55, 0.09) 0%, rgba(139, 30, 43, 0.05) 50%, transparent 80%)',
+          background: 'radial-gradient(ellipse 60% 45% at 50% 30%, rgba(255, 255, 255, 0.85) 0%, rgba(242, 239, 235, 0.5) 60%, transparent 90%)',
           filter: 'blur(40px)',
         }}
       />
 
-      {/* Subtle warm desk vignette along the lower half */}
+      {/* Subtle whisper of raw linen depth toward bottom */}
       <div 
-        className="absolute bottom-[-5%] left-1/2 -translate-x-1/2 w-[1000px] max-w-[120vw] h-[500px] opacity-40 pointer-events-none"
+        className="absolute bottom-[-5%] left-1/2 -translate-x-1/2 w-[1100px] max-w-[120vw] h-[550px] opacity-50 pointer-events-none"
         style={{
-          background: 'radial-gradient(ellipse 70% 50% at 50% 70%, rgba(40, 20, 32, 0.4) 0%, transparent 80%)',
+          background: 'radial-gradient(ellipse 70% 50% at 50% 70%, rgba(242, 239, 235, 0.7) 0%, transparent 85%)',
           filter: 'blur(50px)',
         }}
       />
 
-      {/* Subtle perimeter film vignette */}
+      {/* Understated perimeter vignette for focus */}
       <div 
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: 'radial-gradient(circle at 50% 45%, transparent 45%, rgba(6, 4, 8, 0.75) 100%)',
+          background: 'radial-gradient(circle at 50% 45%, transparent 55%, rgba(48, 48, 48, 0.025) 100%)',
         }}
       />
     </div>

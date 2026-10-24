@@ -87,74 +87,74 @@ export const ChronometerCounter: React.FC<ChronometerCounterProps> = ({
       ref={sectionRef} 
       className="relative w-full py-24 px-4 flex flex-col items-center justify-center text-center z-10 transition-opacity"
     >
-      {/* Decorative Golden Arch Line */}
-      <div className="w-24 h-[1px] bg-gradient-to-r from-transparent via-[#d4af37] to-transparent mb-8" />
+      {/* Decorative Editorial Crimson Arch Line */}
+      <div className="w-24 h-[1px] bg-gradient-to-r from-transparent via-[#8E1624] to-transparent mb-8" />
 
       {/* Quote Capsule */}
       <div className="max-w-2xl mx-auto mb-16">
-        <p className="font-editorial text-2xl sm:text-3xl text-[#fbf8f2]/90 italic leading-relaxed mb-4">
+        <p className="font-editorial text-2xl sm:text-3xl text-[#171717] italic leading-relaxed mb-4">
           "{quote}"
         </p>
-        <span className="font-sans text-xs tracking-widest uppercase text-[#d4af37]/80">
+        <span className="font-sans text-xs tracking-widest uppercase text-[#71717A]">
           — {quoteAuthor}
         </span>
       </div>
 
       {/* Chronometer Box */}
-      <div className="relative p-8 sm:p-10 rounded-2xl bg-[#18111b]/80 border border-[#d4af37]/30 backdrop-blur-md shadow-2xl max-w-3xl w-full">
+      <div className="relative p-8 sm:p-10 rounded-2xl bg-[#FFFFFF] border border-[#F2EFEB] shadow-[0_12px_40px_rgba(23,23,23,0.06)] max-w-3xl w-full">
         {/* Corner Flourishes */}
-        <div className="absolute top-2 left-2 w-3 h-3 border-t-2 border-l-2 border-[#d4af37]/60" />
-        <div className="absolute top-2 right-2 w-3 h-3 border-t-2 border-r-2 border-[#d4af37]/60" />
-        <div className="absolute bottom-2 left-2 w-3 h-3 border-b-2 border-l-2 border-[#d4af37]/60" />
-        <div className="absolute bottom-2 right-2 w-3 h-3 border-b-2 border-r-2 border-[#d4af37]/60" />
+        <div className="absolute top-2 left-2 w-3 h-3 border-t-2 border-l-2 border-[#8E1624]/40" />
+        <div className="absolute top-2 right-2 w-3 h-3 border-t-2 border-r-2 border-[#8E1624]/40" />
+        <div className="absolute bottom-2 left-2 w-3 h-3 border-b-2 border-l-2 border-[#8E1624]/40" />
+        <div className="absolute bottom-2 right-2 w-3 h-3 border-b-2 border-r-2 border-[#8E1624]/40" />
 
-        <div className="flex items-center justify-center gap-2 text-[#d4af37] text-xs font-sans tracking-widest uppercase mb-6">
+        <div className="flex items-center justify-center gap-2 text-[#8E1624] text-xs font-sans tracking-widest uppercase mb-6">
           <Clock className="w-4 h-4 animate-spin [animation-duration:12s]" />
           <span>Every Breath Together</span>
         </div>
 
         {/* Time Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 mb-8">
-          <div className="p-4 rounded-xl bg-white/[0.03] border border-white/5">
-            <span className="font-serif text-3xl sm:text-5xl font-light text-[#fbf8f2] block">
+          <div className="p-4 rounded-xl bg-[#F9F8F5] border border-[#F2EFEB]">
+            <span className="font-serif text-3xl sm:text-5xl font-light text-[#171717] block">
               {elapsed.days.toLocaleString()}
             </span>
-            <span className="font-sans text-[11px] tracking-widest uppercase text-neutral-400 mt-1 block">
+            <span className="font-sans text-[11px] tracking-widest uppercase text-[#71717A] mt-1 block">
               Days
             </span>
           </div>
 
-          <div className="p-4 rounded-xl bg-white/[0.03] border border-white/5">
-            <span className="font-serif text-3xl sm:text-5xl font-light text-[#fbf8f2] block">
+          <div className="p-4 rounded-xl bg-[#F9F8F5] border border-[#F2EFEB]">
+            <span className="font-serif text-3xl sm:text-5xl font-light text-[#171717] block">
               {String(elapsed.hours).padStart(2, '0')}
             </span>
-            <span className="font-sans text-[11px] tracking-widest uppercase text-neutral-400 mt-1 block">
+            <span className="font-sans text-[11px] tracking-widest uppercase text-[#71717A] mt-1 block">
               Hours
             </span>
           </div>
 
-          <div className="p-4 rounded-xl bg-white/[0.03] border border-white/5">
-            <span className="font-serif text-3xl sm:text-5xl font-light text-[#fbf8f2] block">
+          <div className="p-4 rounded-xl bg-[#F9F8F5] border border-[#F2EFEB]">
+            <span className="font-serif text-3xl sm:text-5xl font-light text-[#171717] block">
               {String(elapsed.minutes).padStart(2, '0')}
             </span>
-            <span className="font-sans text-[11px] tracking-widest uppercase text-neutral-400 mt-1 block">
+            <span className="font-sans text-[11px] tracking-widest uppercase text-[#71717A] mt-1 block">
               Minutes
             </span>
           </div>
 
-          <div className="p-4 rounded-xl bg-white/[0.03] border border-white/5">
-            <span className="font-serif text-3xl sm:text-5xl font-light text-[#d4af37] block">
+          <div className="p-4 rounded-xl bg-[#F9F8F5] border border-[#F2EFEB]">
+            <span className="font-serif text-3xl sm:text-5xl font-light text-[#8E1624] block">
               {String(elapsed.seconds).padStart(2, '0')}
             </span>
-            <span className="font-sans text-[11px] tracking-widest uppercase text-neutral-400 mt-1 block">
+            <span className="font-sans text-[11px] tracking-widest uppercase text-[#71717A] mt-1 block">
               Seconds
             </span>
           </div>
         </div>
 
         {/* Subtitle Badge */}
-        <div className="inline-flex items-center gap-2 text-sm font-editorial italic text-neutral-300">
-          <Heart className="w-3.5 h-3.5 fill-[#8b1e2b] text-[#8b1e2b]" />
+        <div className="inline-flex items-center gap-2 text-sm font-editorial italic text-[#71717A]">
+          <Heart className="w-3.5 h-3.5 fill-[#8E1624] text-[#8E1624]" />
           <span>
             {partner1} & {partner2} • {elapsed.totalYears} magnificent years of loving each other
           </span>

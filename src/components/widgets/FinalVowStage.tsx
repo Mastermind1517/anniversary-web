@@ -145,23 +145,23 @@ export const FinalVowStage: React.FC<FinalVowStageProps> = ({
         className="absolute w-[600px] sm:w-[800px] h-[600px] sm:h-[800px] rounded-full pointer-events-none -z-10"
         style={{
           background:
-            'radial-gradient(circle, rgba(212, 175, 55, 0.08) 0%, rgba(139, 30, 43, 0.04) 50%, transparent 75%)',
+            'radial-gradient(circle, rgba(142, 22, 36, 0.04) 0%, rgba(242, 239, 235, 0.6) 50%, transparent 75%)',
           filter: 'blur(60px)',
         }}
       />
 
       {/* Editorial Chapter Header */}
       <div className="text-center max-w-xl mx-auto mb-16 relative z-10">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#d4af37]/10 border border-[#d4af37]/25 text-[#d4af37] text-xs font-sans uppercase tracking-widest mb-3.5 shadow-sm">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#8E1624]/10 border border-[#8E1624]/20 text-[#8E1624] text-xs font-sans uppercase tracking-widest mb-3.5 shadow-sm">
           <Sparkles className="w-3.5 h-3.5" />
           <span>Epilogue • The Grand Climax</span>
         </div>
 
-        <h2 className="font-serif text-3xl sm:text-5xl md:text-6xl font-light text-[#fbf8f2] tracking-wide mb-3">
+        <h2 className="font-serif text-3xl sm:text-5xl md:text-6xl font-light text-[#171717] tracking-wide mb-3">
           Our Eternal Vow
         </h2>
 
-        <p className="font-editorial text-lg sm:text-xl text-neutral-300 italic max-w-md mx-auto leading-relaxed">
+        <p className="font-editorial text-lg sm:text-xl text-[#71717A] italic max-w-md mx-auto leading-relaxed">
           All our memories have led to this single, quiet promise. Words engraved from the deepest corners of the heart.
         </p>
       </div>
@@ -169,30 +169,30 @@ export const FinalVowStage: React.FC<FinalVowStageProps> = ({
       {/* THE GRAND PARCHMENT LETTER */}
       <div
         ref={letterRef}
-        className="relative w-full max-w-3xl bg-[#fcf9f2] text-[#2b231e] rounded-2xl p-6 sm:p-12 md:p-16 shadow-[0_30px_70px_-15px_rgba(0,0,0,0.7),0_0_35px_rgba(212,175,55,0.12)] border border-[#e4d7c2] transition-shadow duration-500"
+        className="relative w-full max-w-3xl bg-[#FFFFFF] text-[#171717] rounded-2xl p-6 sm:p-12 md:p-16 shadow-[0_20px_50px_rgba(23,23,23,0.08)] border border-[#F2EFEB] transition-shadow duration-500"
       >
         {/* Top Archival Header Strip */}
-        <div className="flex items-center justify-between border-b border-[#2b231e]/15 pb-4 mb-8 text-xs font-sans tracking-widest uppercase">
-          <span className="text-[#8b1e2b] font-semibold flex items-center gap-1.5">
+        <div className="flex items-center justify-between border-b border-[#171717]/10 pb-4 mb-8 text-xs font-sans tracking-widest uppercase">
+          <span className="text-[#8E1624] font-semibold flex items-center gap-1.5">
             <Feather className="w-3.5 h-3.5" />
             <span>Perpetual Covenant</span>
           </span>
-          <span className="text-neutral-500 font-editorial italic lowercase text-sm">
+          <span className="text-[#71717A] font-editorial italic lowercase text-sm">
             for {partner2}, with all my soul
           </span>
         </div>
 
-        {/* Vintage Brass Corner Clips */}
-        <div className="absolute top-4 left-4 w-4 h-4 border-t-2 border-l-2 border-[#b38f2b]/50 pointer-events-none" />
-        <div className="absolute top-4 right-4 w-4 h-4 border-t-2 border-r-2 border-[#b38f2b]/50 pointer-events-none" />
+        {/* Vintage Charcoal Corner Clips */}
+        <div className="absolute top-4 left-4 w-4 h-4 border-t-2 border-l-2 border-[#303030]/25 pointer-events-none" />
+        <div className="absolute top-4 right-4 w-4 h-4 border-t-2 border-r-2 border-[#303030]/25 pointer-events-none" />
 
         {/* Salutation Greeting */}
-        <div className="font-script text-4xl sm:text-5xl text-[#8b1e2b] mb-6">
+        <div className="font-handwriting text-4xl sm:text-5xl text-[#8E1624] mb-6">
           {letter.greeting}
         </div>
 
         {/* Letter Body Paragraphs with Progressive Ink Reveal */}
-        <div className="space-y-6 text-[#231b14] font-editorial text-lg sm:text-2xl leading-relaxed italic">
+        <div className="space-y-6 text-[#171717] font-editorial text-lg sm:text-2xl leading-relaxed italic">
           {letter.paragraphs.map((paragraph, idx) => (
             <p
               key={idx}
@@ -207,22 +207,22 @@ export const FinalVowStage: React.FC<FinalVowStageProps> = ({
         </div>
 
         {/* Sign-off & Hand-Signed Signature */}
-        <div className="mt-12 pt-6 border-t border-[#2b231e]/15 flex flex-col items-end">
-          <span className="font-editorial text-lg text-neutral-600 italic">
+        <div className="mt-12 pt-6 border-t border-[#171717]/10 flex flex-col items-end">
+          <span className="font-editorial text-lg text-[#71717A] italic">
             {letter.closing}
           </span>
-          <span className="font-script text-4xl sm:text-6xl text-[#8b1e2b] mt-1.5 transform -rotate-1">
+          <span className="font-handwriting text-4xl sm:text-6xl text-[#8E1624] mt-1.5 transform -rotate-1">
             {letter.signature}
           </span>
         </div>
 
         {/* INTERACTIVE WAX SEAL IMPRESSION */}
-        <div className="mt-10 pt-8 border-t border-[#d4af37]/30 flex flex-col items-center justify-center">
+        <div className="mt-10 pt-8 border-t border-[#171717]/10 flex flex-col items-center justify-center">
           <button
             onClick={handleSealVow}
             aria-label={
               isVowSealed
-                ? 'Vow sealed forever with official gold wax stamp'
+                ? 'Vow sealed forever with official wax stamp'
                 : 'Click to impress the permanent wax seal on our vow'
             }
             className={`group relative flex flex-col items-center justify-center transition-all duration-500 cursor-pointer ${
@@ -233,13 +233,13 @@ export const FinalVowStage: React.FC<FinalVowStageProps> = ({
             <div
               className={`w-24 h-24 sm:w-28 sm:h-28 rounded-full flex flex-col items-center justify-center transition-all duration-700 border-2 shadow-2xl relative ${
                 isVowSealed
-                  ? 'bg-gradient-to-tr from-[#9a741e] via-[#d4af37] to-[#ffe89e] text-[#2b231e] border-white/60 drop-shadow-[0_12px_24px_rgba(212,175,55,0.4)]'
-                  : 'bg-gradient-to-br from-[#8b1e2b] via-[#6a1520] to-[#450a12] text-[#fbf8f2] border-[#d4af37]/40 hover:border-[#d4af37]'
+                  ? 'bg-gradient-to-tr from-[#4F0D15] via-[#8E1624] to-[#A81E2E] text-white border-white/40 drop-shadow-[0_12px_24px_rgba(142,22,36,0.35)]'
+                  : 'bg-gradient-to-br from-[#8E1624] via-[#4F0D15] to-[#171717] text-white border-[#8E1624]/40 hover:border-[#8E1624]'
               }`}
             >
               <Heart
                 className={`w-6 h-6 transition-transform duration-300 ${
-                  isVowSealed ? 'fill-[#8b1e2b] text-[#8b1e2b] scale-110' : 'fill-current text-[#d4af37]'
+                  isVowSealed ? 'fill-white text-white scale-110' : 'fill-current text-white'
                 }`}
               />
 
@@ -253,14 +253,14 @@ export const FinalVowStage: React.FC<FinalVowStageProps> = ({
 
               {/* Verified check badge if sealed */}
               {isVowSealed && (
-                <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-[#8b1e2b] text-white flex items-center justify-center border border-white/40 shadow-md">
+                <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-[#8E1624] text-white flex items-center justify-center border border-white/40 shadow-md">
                   <Check className="w-3.5 h-3.5" />
                 </div>
               )}
             </div>
 
             {/* Seal Subtitle Annotation */}
-            <span className="font-handwriting text-xl sm:text-2xl text-[#8b1e2b] mt-4 text-center">
+            <span className="font-handwriting text-xl sm:text-2xl text-[#8E1624] mt-4 text-center">
               {isVowSealed
                 ? `"${partner1} & ${partner2} • Bound across all iterations of time"`
                 : 'Click to stamp our names into eternity'}
@@ -277,9 +277,9 @@ export const FinalVowStage: React.FC<FinalVowStageProps> = ({
             sound.playPaperRustle();
             setIsVaultOpen(true);
           }}
-          className="px-6 py-3 rounded-full bg-[#18111b] hover:bg-[#221626] text-[#d4af37] border border-[#d4af37]/45 shadow-lg hover:shadow-[0_0_25px_rgba(212,175,55,0.25)] transition-all font-sans text-xs uppercase tracking-widest flex items-center gap-2 cursor-pointer group"
+          className="px-6 py-3 rounded-full bg-white hover:bg-[#F2EFEB] text-[#171717] hover:text-[#8E1624] border border-[#F2EFEB] shadow-sm hover:shadow transition-all font-sans text-xs uppercase tracking-widest flex items-center gap-2 cursor-pointer group"
         >
-          <Lock className="w-4 h-4 text-[#d4af37] transition-transform group-hover:scale-110" />
+          <Lock className="w-4 h-4 text-[#8E1624] transition-transform group-hover:scale-110" />
           <span>Open Secret Vault</span>
         </button>
 
@@ -287,9 +287,9 @@ export const FinalVowStage: React.FC<FinalVowStageProps> = ({
         <button
           onClick={handlePrint}
           aria-label="Print keepsake letter"
-          className="px-6 py-3 rounded-full bg-white/5 hover:bg-white/10 text-white border border-white/15 transition-all font-sans text-xs uppercase tracking-widest flex items-center gap-2 cursor-pointer group"
+          className="px-6 py-3 rounded-full bg-white hover:bg-[#F2EFEB] text-[#171717] hover:text-[#8E1624] border border-[#F2EFEB] shadow-sm hover:shadow transition-all font-sans text-xs uppercase tracking-widest flex items-center gap-2 cursor-pointer group"
         >
-          <Printer className="w-4 h-4 text-neutral-300 transition-transform group-hover:scale-110" />
+          <Printer className="w-4 h-4 text-[#71717A] transition-transform group-hover:scale-110" />
           <span>Print Keepsake</span>
         </button>
 
@@ -297,7 +297,7 @@ export const FinalVowStage: React.FC<FinalVowStageProps> = ({
         <button
           onClick={handleReplayClick}
           aria-label="Replay experience from the opening envelope"
-          className="px-6 py-3 rounded-full bg-white/5 hover:bg-[#d4af37]/15 text-neutral-300 hover:text-[#d4af37] border border-white/15 hover:border-[#d4af37]/40 transition-all font-sans text-xs uppercase tracking-widest flex items-center gap-2 cursor-pointer group"
+          className="px-6 py-3 rounded-full bg-white hover:bg-[#F2EFEB] text-[#171717] hover:text-[#8E1624] border border-[#F2EFEB] shadow-sm hover:shadow transition-all font-sans text-xs uppercase tracking-widest flex items-center gap-2 cursor-pointer group"
         >
           <RotateCcw className="w-4 h-4 transition-transform group-hover:-rotate-90 duration-300" />
           <span>Replay Our Journey</span>
@@ -306,12 +306,12 @@ export const FinalVowStage: React.FC<FinalVowStageProps> = ({
 
       {/* FINAL DEDICATION CLOSING BADGE */}
       <div className="mt-16 text-center relative z-10">
-        <div className="inline-flex items-center gap-2 text-xs font-sans uppercase tracking-[0.2em] text-[#d4af37]/80 mb-2">
-          <Sparkles className="w-3.5 h-3.5" />
+        <div className="inline-flex items-center gap-2 text-xs font-sans uppercase tracking-[0.2em] text-[#71717A] mb-2">
+          <Sparkles className="w-3.5 h-3.5 text-[#8E1624]" />
           <span>To {partner2}, {partner1} & All Our Tomorrows</span>
-          <Sparkles className="w-3.5 h-3.5" />
+          <Sparkles className="w-3.5 h-3.5 text-[#8E1624]" />
         </div>
-        <p className="font-editorial italic text-neutral-400 text-sm max-w-sm mx-auto">
+        <p className="font-editorial italic text-[#71717A] text-sm max-w-sm mx-auto">
           "Whatever our souls are made of, yours and mine are the same."
         </p>
       </div>
@@ -327,17 +327,17 @@ export const FinalVowStage: React.FC<FinalVowStageProps> = ({
         title={isVaultUnlocked ? 'Confidential Getaway' : 'The Secret Vault'}
         subtitle={isVaultUnlocked ? 'Surprise Revealed' : 'Restricted Keepsake'}
         dateTag={isVaultUnlocked ? 'November 15' : 'Passcode Required'}
-        icon={<Lock className="w-4 h-4 text-[#8b1e2b]" />}
+        icon={<Lock className="w-4 h-4 text-[#8E1624]" />}
       >
         {!isVaultUnlocked ? (
           <form onSubmit={handleVaultSubmit} className="text-center py-2">
-            <p className="font-editorial text-lg text-neutral-700 italic mb-4">
+            <p className="font-editorial text-lg text-[#71717A] italic mb-4">
               A private surprise is sealed inside. Enter the four-digit anniversary passcode to open it.
             </p>
 
             <div
               className={`max-w-xs mx-auto mb-4 ${
-                vaultErrorShake ? 'animate-bounce text-red-500' : ''
+                vaultErrorShake ? 'animate-bounce text-[#8E1624]' : ''
               }`}
             >
               <input
@@ -347,33 +347,33 @@ export const FinalVowStage: React.FC<FinalVowStageProps> = ({
                 onChange={(e) => setVaultPasscode(e.target.value)}
                 placeholder="• • • •"
                 aria-label="Enter 4-digit passcode"
-                className="w-full text-center tracking-[0.5em] font-mono text-2xl py-2.5 px-4 rounded-xl bg-black/5 border border-black/15 text-[#2b231e] focus:outline-none focus:border-[#d4af37] transition-all"
+                className="w-full text-center tracking-[0.5em] font-mono text-2xl py-2.5 px-4 rounded-xl bg-black/5 border border-black/15 text-[#171717] focus:outline-none focus:border-[#8E1624] transition-all"
                 autoFocus
               />
             </div>
 
-            <p className="font-sans text-[11px] text-neutral-500 mb-5">
+            <p className="font-sans text-[11px] text-[#71717A] mb-5">
               Hint: {secretVault.hint}
             </p>
 
             <button
               type="submit"
-              className="w-full max-w-xs py-2.5 rounded-xl bg-gradient-to-r from-[#8b1e2b] to-[#b32738] text-white font-sans text-xs uppercase tracking-widest font-semibold hover:brightness-110 shadow-md transition-all cursor-pointer"
+              className="w-full max-w-xs py-2.5 rounded-xl bg-[#8E1624] hover:bg-[#A81E2E] text-white font-sans text-xs uppercase tracking-widest font-semibold hover:brightness-110 shadow-md transition-all cursor-pointer"
             >
               Unlock Vault
             </button>
           </form>
         ) : (
           <div className="text-center py-2">
-            <div className="w-12 h-12 rounded-full bg-[#d4af37]/20 border border-[#d4af37]/50 text-[#8b1e2b] flex items-center justify-center mx-auto mb-3">
-              <Heart className="w-6 h-6 fill-[#8b1e2b]" />
+            <div className="w-12 h-12 rounded-full bg-[#8E1624]/10 border border-[#8E1624]/30 text-[#8E1624] flex items-center justify-center mx-auto mb-3">
+              <Heart className="w-6 h-6 fill-[#8E1624]" />
             </div>
 
-            <h4 className="font-serif text-xl text-[#231b14] font-medium mb-3">
+            <h4 className="font-serif text-xl text-[#171717] font-medium mb-3">
               A Weekend Just for Us
             </h4>
 
-            <p className="font-handwriting text-2xl sm:text-3xl text-[#2b231e] leading-relaxed my-4 px-2">
+            <p className="font-handwriting text-2xl sm:text-3xl text-[#171717] leading-relaxed my-4 px-2">
               "{secretVault.secretMessage}"
             </p>
           </div>

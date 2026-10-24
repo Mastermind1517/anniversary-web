@@ -57,8 +57,8 @@ export const CustomCursor: React.FC = () => {
 
       if (haloRef.current) {
         const haloScale = isHovering ? 1.4 : 1.0;
-        const bg = isHovering ? 'rgba(212, 175, 55, 0.18)' : 'transparent';
-        const borderColor = isHovering ? '#d4af37' : 'rgba(212, 175, 55, 0.4)';
+        const bg = isHovering ? 'rgba(142, 22, 36, 0.12)' : 'transparent';
+        const borderColor = isHovering ? '#8E1624' : 'rgba(142, 22, 36, 0.35)';
         haloRef.current.style.transform = `translate3d(${trailX}px, ${trailY}px, 0) translate(-50%, -50%) scale(${haloScale})`;
         haloRef.current.style.backgroundColor = bg;
         haloRef.current.style.borderColor = borderColor;
@@ -78,16 +78,16 @@ export const CustomCursor: React.FC = () => {
 
   return (
     <>
-      {/* Central precise gold dot */}
+      {/* Central precise deep crimson dot */}
       <div
         ref={dotRef}
-        className="fixed top-0 left-0 w-2 h-2 rounded-full bg-[#d4af37] pointer-events-none z-[100] opacity-0 transition-opacity duration-200 shadow-[0_0_8px_#d4af37]"
+        className="fixed top-0 left-0 w-2 h-2 rounded-full bg-[#8E1624] pointer-events-none z-[100] opacity-0 transition-opacity duration-200 shadow-[0_0_6px_rgba(142,22,36,0.35)]"
         style={{ willChange: 'transform' }}
       />
       {/* Trailing soft halo */}
       <div
         ref={haloRef}
-        className="fixed top-0 left-0 w-7 h-7 rounded-full border border-[#d4af37]/40 pointer-events-none z-[99] opacity-0 transition-opacity duration-200"
+        className="fixed top-0 left-0 w-7 h-7 rounded-full border border-[#8E1624]/35 pointer-events-none z-[99] opacity-0 transition-opacity duration-200"
         style={{ willChange: 'transform' }}
       />
     </>
