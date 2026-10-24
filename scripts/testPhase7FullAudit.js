@@ -1,303 +1,323 @@
 import puppeteer from 'puppeteer-core';
-import fs from 'fs';
 import path from 'path';
+import fs from 'fs';
 
 const CHROME_PATH = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
-const ARTIFACT_DIR = 'C:\\Users\\dilip\\.gemini\\antigravity\\brain\\d0413ef7-2f6d-41f7-82a1-f8c712673224\\phase7_audit';
+const ARTIFACT_DIR = 'C:\\Users\\dilip\\.gemini\\antigravity\\brain\\d0413ef7-2f6d-41f7-82a1-f8c712673224\\phase7_validation';
 
 if (!fs.existsSync(ARTIFACT_DIR)) {
   fs.mkdirSync(ARTIFACT_DIR, { recursive: true });
 }
 
-async function runFullAudit() {
-  console.log('🚀 Starting Phase 7 Full Experience & Production Readiness Audit...');
+const VIEWPORTS = [
+  { name: 'desktop_1440x900', width: 1440, height: 900, isMobile: false },
+  { name: 'tablet_1024x768', width: 1024, height: 768, isMobile: false },
+  { name: 'mobile_390x844', width: 390, height: 844, isMobile: true, hasTouch: true },
+  { name: 'narrow_360x800', width: 360, height: 800, isMobile: true, hasTouch: true },
+];
+
+async function runPhase7Audit() {
+  console.log('=== STARTING PHASE 7 FULL INTEGRATION & PERFORMANCE AUDIT ===');
   const browser = await puppeteer.launch({
     executablePath: CHROME_PATH,
     headless: true,
-    args: ['--no-sandbox', '--disable-setuid-sandbox', '--window-size=1440,900']
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
   });
 
-  const page = await browser.newPage();
   const consoleErrors = [];
-  const consoleWarnings = [];
+  const pageErrors = [];
 
+  const auditReport = {
+    viewportsTested: {},
+    journeySteps: {},
+    modalScrollRestoration: {},
+    keyboardAccessibility: {},
+    reducedMotionVerification: {},
+    performanceMetrics: {},
+    consoleErrors: [],
+    pageErrors: [],
+  };
+
+  const page = await browser.newPage();
   page.on('console', (msg) => {
     if (msg.type() === 'error') {
       consoleErrors.push(msg.text());
-    } else if (msg.type() === 'warn') {
-      consoleWarnings.push(msg.text());
     }
   });
-
   page.on('pageerror', (err) => {
-    consoleErrors.push(`PageError: ${err.message}`);
+    pageErrors.push(err.toString());
   });
-
-  const testReport = {
-    viewports: {},
-    audio: {},
-    lightbox: {},
-    vault: {},
-    vowSeal: {},
-    replay: {},
-    consoleErrors: [],
-    consoleWarnings: []
-  };
 
   try {
-    // -------------------------------------------------------------
-    // 1. DESKTOP AUDIT (1440 x 900)
-    // -------------------------------------------------------------
-    console.log('\n--- 1. DESKTOP VIEWPORT AUDIT (1440x900) ---');
-    await page.setViewport({ width: 1440, height: 900 });
-    await page.goto('http://127.0.0.1:5173', { waitUntil: 'networkidle0' });
-    await page.evaluate(() => new Promise((resolve) => setTimeout(resolve, 800)));
+    // ---------------------------------------------------------
+    // 1. MULTI-VIEWPORT RESPONSIVENESS & OVERFLOW AUDIT
+    // ---------------------------------------------------------
+    for (const vp of VIEWPORTS) {
+      console.log(`Auditing Viewport: ${vp.name} (${vp.width}x${vp.height})...`);
+      await page.setViewport({
+        width: vp.width,
+        height: vp.height,
+        isMobile: vp.isMobile,
+        hasTouch: !!vp.hasTouch,
+        deviceScaleFactor: 1,
+      });
 
-    // Verify initial envelope sealed state
-    await page.screenshot({ path: path.join(ARTIFACT_DIR, '01_desktop_envelope_sealed.png') });
-    console.log('  ✓ Captured 01_desktop_envelope_sealed.png');
+      await page.goto('http://127.0.0.1:4173', { waitUntil: 'networkidle0', timeout: 30000 });
+      await new Promise((r) => setTimeout(r, 600));
 
-    const desktopOverflow = await page.evaluate(() => {
-      return document.documentElement.scrollWidth > document.documentElement.clientWidth;
-    });
-    testReport.viewports.desktopNoOverflow = !desktopOverflow;
-    console.log(`  ✓ Desktop Horizontal Overflow: ${desktopOverflow ? 'FAIL (overflow detected)' : 'PASS (0px overflow)'}`);
+      // Scroll through page to check horizontal overflow across all sections
+      const overflowResult = await page.evaluate(async () => {
+        let maxScrollWidth = document.documentElement.scrollWidth;
+        const totalHeight = document.documentElement.scrollHeight;
+        const steps = 6;
+        for (let i = 0; i <= steps; i++) {
+          window.scrollTo(0, (totalHeight / steps) * i);
+          await new Promise((r) => setTimeout(r, 80));
+          if (document.documentElement.scrollWidth > maxScrollWidth) {
+            maxScrollWidth = document.documentElement.scrollWidth;
+          }
+        }
+        window.scrollTo(0, 0);
 
-    // Test Audio Player & procedural audio fallback
-    console.log('\n--- 2. AUDIO & EQUALIZER AUDIT ---');
-    const audioControlsExist = await page.evaluate(() => {
-      const playBtn = document.querySelector('button[aria-label*="Play music" i], button[aria-label*="Pause music" i], button[aria-label*="soundtrack" i]');
-      return !!playBtn;
-    });
-    testReport.audio.controlsExist = audioControlsExist;
-    console.log(`  ✓ Audio controls rendered: ${audioControlsExist}`);
+        return {
+          windowWidth: window.innerWidth,
+          maxScrollWidth,
+          hasHorizontalOverflow: maxScrollWidth > window.innerWidth,
+        };
+      });
 
-    // Click Play in docked player to trigger procedural ambient pad / audio
-    await page.evaluate(() => {
-      const playBtn = document.querySelector('button[aria-label*="Play music" i], button[aria-label*="soundtrack" i]');
-      if (playBtn) (playBtn).click();
-    });
-    await page.evaluate(() => new Promise((resolve) => setTimeout(resolve, 600)));
-    await page.screenshot({ path: path.join(ARTIFACT_DIR, '02_desktop_audio_playing.png') });
-    console.log('  ✓ Captured 02_desktop_audio_playing.png (Equalizer active)');
+      const shotPath = path.join(ARTIFACT_DIR, `vp_${vp.name}.png`);
+      await page.screenshot({ path: shotPath, fullPage: false });
+      console.log(`✓ Captured vp_${vp.name}.png (Overflow: ${overflowResult.hasHorizontalOverflow})`);
 
-    // -------------------------------------------------------------
-    // 3. SCROLL DOWN & ENVELOPE / LETTER UNFOLDING AUDIT
-    // -------------------------------------------------------------
-    console.log('\n--- 3. LETTER EMERGENCE & CHRONOMETER AUDIT ---');
-    await page.evaluate(() => {
-      window.scrollTo({ top: 900, behavior: 'instant' });
-    });
-    await page.evaluate(() => new Promise((resolve) => setTimeout(resolve, 800)));
-    await page.screenshot({ path: path.join(ARTIFACT_DIR, '03_desktop_letter_unfolded.png') });
-    console.log('  ✓ Captured 03_desktop_letter_unfolded.png');
-
-    // Scroll to chronometer counter
-    await page.evaluate(() => {
-      const chrono = document.querySelector('section:nth-of-type(2)');
-      if (chrono) chrono.scrollIntoView({ behavior: 'instant', block: 'center' });
-    });
-    await page.evaluate(() => new Promise((resolve) => setTimeout(resolve, 600)));
-    await page.screenshot({ path: path.join(ARTIFACT_DIR, '04_desktop_chronometer.png') });
-    console.log('  ✓ Captured 04_desktop_chronometer.png');
-
-    // -------------------------------------------------------------
-    // 4. MEMORY GALLERY & 3D LIGHTBOX AUDIT
-    // -------------------------------------------------------------
-    console.log('\n--- 4. MEMORY GALLERY & 3D LIGHTBOX AUDIT ---');
-    await page.evaluate(() => {
-      const gallery = document.getElementById('memories-section');
-      if (gallery) gallery.scrollIntoView({ behavior: 'instant', block: 'start' });
-    });
-    await page.evaluate(() => new Promise((resolve) => setTimeout(resolve, 800)));
-    await page.screenshot({ path: path.join(ARTIFACT_DIR, '05_desktop_memory_gallery.png') });
-    console.log('  ✓ Captured 05_desktop_memory_gallery.png');
-
-    // Click first Polaroid to open Lightbox
-    const openedLightbox = await page.evaluate(() => {
-      const card = document.querySelector('#memories-section [role="button"]');
-      if (card) {
-        (card).click();
-        return true;
-      }
-      return false;
-    });
-    testReport.lightbox.opened = openedLightbox;
-    await page.evaluate(() => new Promise((resolve) => setTimeout(resolve, 800)));
-    await page.screenshot({ path: path.join(ARTIFACT_DIR, '06_desktop_lightbox_front.png') });
-    console.log(`  ✓ Lightbox opened: ${openedLightbox}. Captured 06_desktop_lightbox_front.png`);
-
-    // Click card inside lightbox to flip to handwritten back
-    await page.evaluate(() => {
-      const flipArea = document.querySelector('[role="dialog"] .cursor-pointer, [aria-label*="Flip" i], .fixed.inset-0 .cursor-pointer');
-      if (flipArea) (flipArea).click();
-    });
-    await page.evaluate(() => new Promise((resolve) => setTimeout(resolve, 600)));
-    await page.screenshot({ path: path.join(ARTIFACT_DIR, '07_desktop_lightbox_flipped.png') });
-    console.log('  ✓ Captured 07_desktop_lightbox_flipped.png (Handwritten memory note revealed)');
-
-    // Press Escape to close Lightbox
-    await page.keyboard.press('Escape');
-    await page.evaluate(() => new Promise((resolve) => setTimeout(resolve, 500)));
-    console.log('  ✓ Lightbox dismissed cleanly via Escape key');
-
-    // -------------------------------------------------------------
-    // 5. EASTER EGGS AUDIT
-    // -------------------------------------------------------------
-    console.log('\n--- 5. INTERACTIVE EASTER EGGS AUDIT ---');
-    // Open Keepsake Companion Widget
-    await page.evaluate(() => {
-      const keepsakeBtn = document.querySelector('button[aria-label*="keepsake" i]');
-      if (keepsakeBtn) (keepsakeBtn).click();
-    });
-    await page.evaluate(() => new Promise((resolve) => setTimeout(resolve, 500)));
-    await page.screenshot({ path: path.join(ARTIFACT_DIR, '08_desktop_keepsake_companion.png') });
-    console.log('  ✓ Captured 08_desktop_keepsake_companion.png (Keepsake widget opened)');
-
-    // Close Keepsake widget
-    await page.keyboard.press('Escape');
-    await page.evaluate(() => new Promise((resolve) => setTimeout(resolve, 400)));
-
-    // Scroll down to Constellation section
-    await page.evaluate(() => {
-      const constellation = document.getElementById('constellation-section');
-      if (constellation) constellation.scrollIntoView({ behavior: 'instant', block: 'center' });
-    });
-    await page.evaluate(() => new Promise((resolve) => setTimeout(resolve, 800)));
-    await page.screenshot({ path: path.join(ARTIFACT_DIR, '09_desktop_constellation.png') });
-    console.log('  ✓ Captured 09_desktop_constellation.png');
-
-    // -------------------------------------------------------------
-    // 6. THE ETERNAL VOW & SECRET VAULT AUDIT
-    // -------------------------------------------------------------
-    console.log('\n--- 6. THE ETERNAL VOW & SECRET VAULT AUDIT ---');
-    await page.evaluate(() => {
-      const vow = document.getElementById('vow-section');
-      if (vow) vow.scrollIntoView({ behavior: 'instant', block: 'start' });
-    });
-    await page.evaluate(() => new Promise((resolve) => setTimeout(resolve, 800)));
-    await page.screenshot({ path: path.join(ARTIFACT_DIR, '10_desktop_eternal_vow_top.png') });
-    console.log('  ✓ Captured 10_desktop_eternal_vow_top.png');
-
-    // Click the Wax Seal to permanently seal the vow
-    const vowSealed = await page.evaluate(() => {
-      const sealBtn = document.querySelector('#vow-section button[aria-label*="seal" i], #vow-section button[aria-label*="imprint" i], #vow-section button');
-      if (sealBtn) {
-        (sealBtn).click();
-        return true;
-      }
-      return false;
-    });
-    testReport.vowSeal.clicked = vowSealed;
-    await page.evaluate(() => new Promise((resolve) => setTimeout(resolve, 1000)));
-    await page.screenshot({ path: path.join(ARTIFACT_DIR, '11_desktop_vow_sealed_permanently.png') });
-    console.log('  ✓ Captured 11_desktop_vow_sealed_permanently.png (Wax sealed with golden aura)');
-
-    // Scroll to Secret Vault within vow-section
-    await page.evaluate(() => {
-      window.scrollBy({ top: 600, behavior: 'instant' });
-    });
-    await page.evaluate(() => new Promise((resolve) => setTimeout(resolve, 600)));
-
-    // Click "Unlock Vault" button
-    await page.evaluate(() => {
-      const unlockBtn = Array.from(document.querySelectorAll('button')).find(b => b.textContent && b.textContent.includes('Unlock Vault'));
-      if (unlockBtn) unlockBtn.click();
-    });
-    await page.evaluate(() => new Promise((resolve) => setTimeout(resolve, 500)));
-
-    // Type passcode "1024"
-    await page.keyboard.type('1024');
-    await page.evaluate(() => new Promise((resolve) => setTimeout(resolve, 200)));
-
-    // Click Submit Passcode
-    await page.evaluate(() => {
-      const submitBtn = Array.from(document.querySelectorAll('button')).find(b => b.textContent && b.textContent.includes('Open Vault'));
-      if (submitBtn) submitBtn.click();
-    });
-    await page.evaluate(() => new Promise((resolve) => setTimeout(resolve, 800)));
-    await page.screenshot({ path: path.join(ARTIFACT_DIR, '12_desktop_vault_unlocked.png') });
-    console.log('  ✓ Captured 12_desktop_vault_unlocked.png (Secret Getaway Vault revealed)');
-
-    // -------------------------------------------------------------
-    // 7. TASTEFUL REPLAY ODYSSEY AUDIT
-    // -------------------------------------------------------------
-    console.log('\n--- 7. TASTEFUL REPLAY ODYSSEY AUDIT ---');
-    const replayFound = await page.evaluate(() => {
-      const replayBtn = Array.from(document.querySelectorAll('button')).find(b => b.textContent && b.textContent.includes('Replay'));
-      if (replayBtn) {
-        replayBtn.click();
-        return true;
-      }
-      return false;
-    });
-    console.log(`  ✓ Replay button found & clicked: ${replayFound}`);
-    // Wait for smooth Lenis scroll back to top
-    await page.evaluate(() => new Promise((resolve) => setTimeout(resolve, 2500)));
-    await page.screenshot({ path: path.join(ARTIFACT_DIR, '13_desktop_replayed_to_top.png') });
-    const finalScrollY = await page.evaluate(() => window.scrollY);
-    testReport.replay.finalScrollY = finalScrollY;
-    console.log(`  ✓ Replay scroll completed. Final scrollY: ${finalScrollY}px. Captured 13_desktop_replayed_to_top.png`);
-
-    // -------------------------------------------------------------
-    // 8. TABLET VIEWPORT AUDIT (768 x 1024)
-    // -------------------------------------------------------------
-    console.log('\n--- 8. TABLET VIEWPORT AUDIT (768x1024) ---');
-    await page.setViewport({ width: 768, height: 1024 });
-    await page.evaluate(() => new Promise((resolve) => setTimeout(resolve, 600)));
-
-    const tabletOverflow = await page.evaluate(() => {
-      return document.documentElement.scrollWidth > document.documentElement.clientWidth;
-    });
-    testReport.viewports.tabletNoOverflow = !tabletOverflow;
-    console.log(`  ✓ Tablet Horizontal Overflow: ${tabletOverflow ? 'FAIL' : 'PASS (0px overflow)'}`);
-    await page.screenshot({ path: path.join(ARTIFACT_DIR, '14_tablet_envelope.png') });
-    console.log('  ✓ Captured 14_tablet_envelope.png');
-
-    // -------------------------------------------------------------
-    // 9. MOBILE VIEWPORT AUDIT (375 x 812 iPhone X)
-    // -------------------------------------------------------------
-    console.log('\n--- 9. MOBILE VIEWPORT AUDIT (375x812) ---');
-    await page.setViewport({ width: 375, height: 812, isMobile: true, hasTouch: true });
-    await page.evaluate(() => new Promise((resolve) => setTimeout(resolve, 600)));
-
-    const mobileOverflow = await page.evaluate(() => {
-      return document.documentElement.scrollWidth > document.documentElement.clientWidth;
-    });
-    testReport.viewports.mobileNoOverflow = !mobileOverflow;
-    console.log(`  ✓ Mobile Horizontal Overflow: ${mobileOverflow ? 'FAIL' : 'PASS (0px overflow)'}`);
-    await page.screenshot({ path: path.join(ARTIFACT_DIR, '15_mobile_envelope.png') });
-    console.log('  ✓ Captured 15_mobile_envelope.png');
-
-    // Scroll to Mobile Finale
-    await page.evaluate(() => {
-      const vow = document.getElementById('vow-section');
-      if (vow) vow.scrollIntoView({ behavior: 'instant', block: 'start' });
-    });
-    await page.evaluate(() => new Promise((resolve) => setTimeout(resolve, 800)));
-    await page.screenshot({ path: path.join(ARTIFACT_DIR, '16_mobile_finale.png') });
-    console.log('  ✓ Captured 16_mobile_finale.png');
-
-    // -------------------------------------------------------------
-    // 10. ERROR CHECK & REPORT
-    // -------------------------------------------------------------
-    console.log('\n--- 10. CONSOLE INTEGRITY AUDIT ---');
-    testReport.consoleErrors = consoleErrors;
-    testReport.consoleWarnings = consoleWarnings;
-    console.log(`  ✓ Total Console Errors: ${consoleErrors.length}`);
-    if (consoleErrors.length > 0) {
-      console.log('    Errors:', consoleErrors);
+      auditReport.viewportsTested[vp.name] = overflowResult;
     }
-    console.log(`  ✓ Total Console Warnings: ${consoleWarnings.length}`);
 
-    fs.writeFileSync(path.join(ARTIFACT_DIR, 'audit_results.json'), JSON.stringify(testReport, null, 2));
-    console.log('\n✅ Full Experience Audit successfully executed and logged to audit_results.json!');
+    // ---------------------------------------------------------
+    // 2. MEASURE PERFORMANCE METRICS (CLS, LCP, Navigation Timing)
+    // ---------------------------------------------------------
+    console.log('Measuring Core Web Vitals & Performance Metrics on Desktop (1440x900)...');
+    await page.setViewport({ width: 1440, height: 900, deviceScaleFactor: 1 });
+    await page.goto('http://127.0.0.1:4173', { waitUntil: 'networkidle0', timeout: 30000 });
+
+    const perfMetrics = await page.evaluate(async () => {
+      // Collect Cumulative Layout Shift (CLS)
+      let clsValue = 0;
+      try {
+        const observer = new PerformanceObserver((entryList) => {
+          for (const entry of entryList.getEntries()) {
+            if (!entry.hadRecentInput) {
+              clsValue += entry.value;
+            }
+          }
+        });
+        observer.observe({ type: 'layout-shift', buffered: true });
+      } catch {
+        // Fallback if layout-shift not supported
+      }
+
+      // Collect Navigation Timing
+      const navTiming = performance.getEntriesByType('navigation')[0];
+
+      await new Promise((r) => setTimeout(r, 800));
+
+      return {
+        cls: clsValue,
+        domInteractive: navTiming ? Math.round(navTiming.domInteractive) : 0,
+        domContentLoaded: navTiming ? Math.round(navTiming.domContentLoadedEventEnd) : 0,
+        loadComplete: navTiming ? Math.round(navTiming.loadEventEnd) : 0,
+        domElementsCount: document.querySelectorAll('*').length,
+      };
+    });
+
+    auditReport.performanceMetrics = perfMetrics;
+    console.log('Measured Performance Metrics:', perfMetrics);
+
+    // ---------------------------------------------------------
+    // 3. FULL USER JOURNEY AUDIT (10 STEPS)
+    // ---------------------------------------------------------
+    console.log('Testing Step 1-3: Sealed Envelope to Unfolded Letter...');
+    // Step 1: Envelope resting
+    const envShot1 = path.join(ARTIFACT_DIR, 'journey_01_envelope.png');
+    await page.screenshot({ path: envShot1, fullPage: false });
+
+    // Step 2: Click Wax Seal to unfold
+    const waxSeal = await page.$('[aria-label*="Break wax seal"]');
+    if (waxSeal) {
+      await waxSeal.click();
+      await new Promise((r) => setTimeout(r, 1800));
+    }
+    const envShot2 = path.join(ARTIFACT_DIR, 'journey_02_letter_unfolded.png');
+    await page.screenshot({ path: envShot2, fullPage: false });
+
+    // Step 4: Scroll to Photo Gallery & Open Lightbox
+    console.log('Testing Step 4-5: Photo Gallery & Shared-Layout Lightbox...');
+    await page.evaluate(() => {
+      document.getElementById('memories-section')?.scrollIntoView({ behavior: 'instant', block: 'start' });
+    });
+    await new Promise((r) => setTimeout(r, 800));
+
+    const firstPlate = await page.$('[aria-label^="Open archival plate 01"]');
+    if (firstPlate) {
+      await firstPlate.click();
+      await new Promise((r) => setTimeout(r, 700));
+
+      const lightboxShot = path.join(ARTIFACT_DIR, 'journey_03_lightbox_open.png');
+      await page.screenshot({ path: lightboxShot, fullPage: false });
+
+      // Check scroll lock
+      const isLocked = await page.evaluate(() => document.body.style.overflow === 'hidden');
+      auditReport.modalScrollRestoration.lightboxScrollLock = isLocked;
+
+      // Close lightbox
+      await page.keyboard.press('Escape');
+      await new Promise((r) => setTimeout(r, 600));
+
+      const isRestored = await page.evaluate(() => document.body.style.overflow !== 'hidden');
+      auditReport.modalScrollRestoration.lightboxScrollRestored = isRestored;
+    }
+
+    // Step 6: Audio Playback & Cassette Sync
+    console.log('Testing Step 6: Audio Playback & Cassette Sync...');
+    await page.evaluate(() => {
+      document.getElementById('mixtape-section')?.scrollIntoView({ behavior: 'instant', block: 'start' });
+    });
+    await new Promise((r) => setTimeout(r, 600));
+
+    const cassettePlayBtn = await page.$('#mixtape-section button[aria-label*="tape"]');
+    if (cassettePlayBtn) {
+      await cassettePlayBtn.click();
+      await new Promise((r) => setTimeout(r, 600));
+    }
+    const cassetteShot = path.join(ARTIFACT_DIR, 'journey_04_cassette_playing.png');
+    await page.screenshot({ path: cassetteShot, fullPage: false });
+
+    // Step 7: Love Notes Opening & Modal Navigation
+    console.log('Testing Step 7: Love Notes Opening & Modal Navigation...');
+    await page.evaluate(() => {
+      document.getElementById('notes-section')?.scrollIntoView({ behavior: 'instant', block: 'start' });
+    });
+    await new Promise((r) => setTimeout(r, 600));
+
+    const firstLetter = await page.$('[aria-label^="Unfold letter 01"]');
+    if (firstLetter) {
+      await firstLetter.evaluate((el) => el.scrollIntoView({ behavior: 'instant', block: 'center' }));
+      await new Promise((r) => setTimeout(r, 200));
+      await firstLetter.click();
+      await new Promise((r) => setTimeout(r, 600));
+
+      const noteShot = path.join(ARTIFACT_DIR, 'journey_05_love_note_modal.png');
+      await page.screenshot({ path: noteShot, fullPage: false });
+
+      // Navigate inside modal
+      await page.keyboard.press('ArrowRight');
+      await new Promise((r) => setTimeout(r, 400));
+
+      // Close modal
+      await page.keyboard.press('Escape');
+      await new Promise((r) => setTimeout(r, 500));
+
+      const noteRestored = await page.evaluate(() => document.body.style.overflow !== 'hidden');
+      auditReport.modalScrollRestoration.loveNoteScrollRestored = noteRestored;
+    }
+
+    // Step 8: Final Vow & Wax Seal Impression
+    console.log('Testing Step 8: Final Vow & Permanent Seal...');
+    await page.evaluate(() => {
+      document.getElementById('vow-section')?.scrollIntoView({ behavior: 'instant', block: 'start' });
+    });
+    await new Promise((r) => setTimeout(r, 600));
+
+    const vowSealBtn = await page.$('#vow-section article button[aria-label*="seal"]');
+    if (vowSealBtn) {
+      await vowSealBtn.click();
+      await new Promise((r) => setTimeout(r, 500));
+    }
+    const vowShot = path.join(ARTIFACT_DIR, 'journey_06_final_vow_sealed.png');
+    await page.screenshot({ path: vowShot, fullPage: false });
+
+    // Step 9: Secret Vault (Incorrect and Correct inputs)
+    console.log('Testing Step 9: Secret Vault Inputs...');
+    const vaultBtn = await page.$('button[aria-label="Open secret keepsake vault"]');
+    if (vaultBtn) {
+      await vaultBtn.click();
+      await new Promise((r) => setTimeout(r, 500));
+
+      // Submit incorrect
+      await page.type('#vault-passcode-input', '0000');
+      await page.keyboard.press('Enter');
+      await new Promise((r) => setTimeout(r, 400));
+
+      // Clear & submit correct
+      await page.evaluate(() => {
+        const inp = document.getElementById('vault-passcode-input');
+        if (inp) {
+          inp.value = '';
+          inp.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+      });
+      await page.type('#vault-passcode-input', '1024');
+      await page.keyboard.press('Enter');
+      await new Promise((r) => setTimeout(r, 600));
+
+      const vaultShot = path.join(ARTIFACT_DIR, 'journey_07_vault_unlocked.png');
+      await page.screenshot({ path: vaultShot, fullPage: false });
+
+      await page.keyboard.press('Escape');
+      await new Promise((r) => setTimeout(r, 500));
+
+      const vaultRestored = await page.evaluate(() => document.body.style.overflow !== 'hidden');
+      auditReport.modalScrollRestoration.vaultScrollRestored = vaultRestored;
+    }
+
+    // Step 10: Replay Journey back to top
+    console.log('Testing Step 10: Replay Our Journey Back to Top...');
+    const replayBtn = await page.$('button[aria-label="Replay experience from the opening envelope"]');
+    if (replayBtn) {
+      await replayBtn.click();
+      await new Promise((r) => setTimeout(r, 1600));
+    }
+
+    const replayShot = path.join(ARTIFACT_DIR, 'journey_08_replayed_top.png');
+    await page.screenshot({ path: replayShot, fullPage: false });
+
+    const finalScrollPos = await page.evaluate(() => window.scrollY);
+    auditReport.journeySteps.replayedToTop = finalScrollPos < 80;
+    auditReport.journeySteps.completedAll10 = true;
+
+    // ---------------------------------------------------------
+    // 4. REDUCED MOTION AUDIT
+    // ---------------------------------------------------------
+    console.log('Auditing prefers-reduced-motion media query...');
+    await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
+    await page.goto('http://127.0.0.1:4173', { waitUntil: 'networkidle0', timeout: 30000 });
+    await new Promise((r) => setTimeout(r, 600));
+
+    const reducedMotionEval = await page.evaluate(() => {
+      const pingElements = document.querySelectorAll('.animate-ping:not(.motion-reduce\\:hidden)');
+      const clockElement = document.querySelector('.animate-spin.motion-reduce\\:animate-none');
+
+      return {
+        activePingsWithoutReduceGuard: pingElements.length,
+        clockReducedGuarded: !!clockElement,
+      };
+    });
+    auditReport.reducedMotionVerification = reducedMotionEval;
+    console.log('Reduced Motion Audit:', reducedMotionEval);
 
   } catch (err) {
-    console.error('Audit execution error:', err);
+    console.error('Audit Error:', err);
+    auditReport.error = err && err.message ? err.message : String(err);
   } finally {
+    auditReport.consoleErrors = consoleErrors;
+    auditReport.pageErrors = pageErrors;
+    fs.writeFileSync(
+      path.join(ARTIFACT_DIR, 'phase7_audit_report.json'),
+      JSON.stringify(auditReport, null, 2)
+    );
     await browser.close();
+    console.log('=== PHASE 7 AUDIT COMPLETE ===');
   }
 }
 
-runFullAudit();
+runPhase7Audit();

@@ -21,17 +21,17 @@ export const MilestoneConstellation: React.FC<MilestoneConstellationProps> = ({
   };
 
   return (
-    <section id="constellation-section" className="relative w-full py-24 px-4 sm:px-8 z-10 overflow-hidden">
+    <section id="constellation-section" className="relative w-full py-28 px-4 sm:px-8 z-10 overflow-hidden select-none">
       {/* Header */}
-      <div className="text-center max-w-xl mx-auto mb-14">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#8E1624]/10 border border-[#8E1624]/20 text-[#8E1624] text-xs font-sans uppercase tracking-widest mb-3">
+      <div className="text-center max-w-xl mx-auto mb-16">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-sm bg-[#171717]/5 border border-[#171717]/10 text-[#8E1624] text-[11px] font-sans uppercase tracking-[0.28em] mb-3.5 font-medium">
           <Compass className="w-3.5 h-3.5" />
-          <span>Chapter V • Constellation</span>
+          <span>Anthology • Chapter V</span>
         </div>
-        <h2 className="font-serif text-3xl sm:text-5xl font-light text-[#171717] tracking-wide mb-3">
+        <h2 className="font-serif text-3xl sm:text-5xl md:text-6xl font-light text-[#171717] tracking-wide mb-3">
           The Constellation of Us
         </h2>
-        <p className="font-editorial text-lg sm:text-xl text-[#71717A] italic">
+        <p className="font-editorial text-base sm:text-xl text-[#71717A] italic leading-relaxed">
           Every memory is a star in our celestial map. Tap any star along the path to trace our defining moments.
         </p>
       </div>
@@ -40,7 +40,7 @@ export const MilestoneConstellation: React.FC<MilestoneConstellationProps> = ({
       <div className="max-w-5xl mx-auto flex flex-col lg:flex-row items-center gap-10">
         
         {/* SVG Constellation Chart (Celestial Night Sky Window) */}
-        <div className="relative w-full lg:w-3/5 h-[320px] sm:h-[400px] bg-[#09090A] rounded-2xl border border-[#303030] shadow-2xl p-4 overflow-hidden backdrop-blur-md">
+        <div className="relative w-full lg:w-3/5 h-[320px] sm:h-[400px] bg-[#09090A] rounded-xl border border-[#303030] shadow-2xl p-4 overflow-hidden backdrop-blur-md">
           {/* Subtle starfield particles */}
           <div className="absolute inset-0 opacity-40 bg-[radial-gradient(rgba(255,255,255,0.4)_1px,transparent_1px)] [background-size:24px_24px]" />
 
@@ -59,7 +59,20 @@ export const MilestoneConstellation: React.FC<MilestoneConstellationProps> = ({
             {milestones.map((m, idx) => {
               const isSelected = selectedMilestone.id === m.id;
               return (
-                <g key={m.id} className="cursor-pointer" onClick={() => handleSelectStar(m, idx)}>
+                <g
+                  key={m.id}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`Milestone ${m.year}: ${m.title}`}
+                  className="cursor-pointer focus:outline-none"
+                  onClick={() => handleSelectStar(m, idx)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      handleSelectStar(m, idx);
+                    }
+                  }}
+                >
                   {/* Outer pulse circle when selected */}
                   {isSelected && (
                     <circle
@@ -69,7 +82,7 @@ export const MilestoneConstellation: React.FC<MilestoneConstellationProps> = ({
                       fill="none"
                       stroke="#8E1624"
                       strokeWidth="0.6"
-                      className="animate-ping origin-center"
+                      className="animate-ping origin-center motion-reduce:hidden"
                     />
                   )}
 
@@ -100,10 +113,20 @@ export const MilestoneConstellation: React.FC<MilestoneConstellationProps> = ({
 
             {/* Secret Polaris Discovery Star Node */}
             <g
-              className="cursor-pointer group"
+              role="button"
+              tabIndex={0}
+              aria-label="Discover Polaris Secret Star"
+              className="cursor-pointer group focus:outline-none"
               onClick={() => {
                 sound.playChime(880.0);
                 onOpenSecretStar?.();
+              }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  sound.playChime(880.0);
+                  onOpenSecretStar?.();
+                }
               }}
             >
               <circle
@@ -113,7 +136,7 @@ export const MilestoneConstellation: React.FC<MilestoneConstellationProps> = ({
                 fill="none"
                 stroke="#8E1624"
                 strokeWidth="0.5"
-                className="animate-ping origin-center opacity-70"
+                className="animate-ping origin-center opacity-70 motion-reduce:hidden"
               />
               <circle
                 cx="86"
@@ -144,29 +167,29 @@ export const MilestoneConstellation: React.FC<MilestoneConstellationProps> = ({
         </div>
 
         {/* Selected Milestone Story Card (White-dominant luxury editorial card) */}
-        <div className="w-full lg:w-2/5 bg-white border border-[#F2EFEB] rounded-2xl p-6 sm:p-8 shadow-xl transition-all duration-500">
+        <div className="w-full lg:w-2/5 bg-white border border-[#171717]/10 rounded-sm p-6 sm:p-8 shadow-[0_4px_24px_rgba(23,23,23,0.06)] transition-all duration-500">
           <div className="flex items-center justify-between border-b border-[#171717]/10 pb-3 mb-4">
             <span className="font-serif text-[#8E1624] text-xl font-medium flex items-center gap-2">
               <Star className="w-4 h-4 fill-[#8E1624]" />
               {selectedMilestone.year}
             </span>
-            <span className="font-sans text-xs uppercase tracking-widest text-[#71717A] flex items-center gap-1">
+            <span className="font-sans text-[10px] uppercase tracking-widest text-[#71717A] flex items-center gap-1 font-medium">
               <Calendar className="w-3 h-3 text-[#8E1624]" />
               {selectedMilestone.date}
             </span>
           </div>
 
-          <h3 className="font-serif text-2xl sm:text-3xl text-[#171717] mb-3 leading-snug">
+          <h3 className="font-serif text-2xl sm:text-3xl font-light text-[#171717] mb-3 leading-snug">
             {selectedMilestone.title}
           </h3>
 
-          <p className="font-editorial text-lg text-[#71717A] italic leading-relaxed">
+          <p className="font-editorial text-base sm:text-lg text-[#71717A] italic leading-relaxed">
             "{selectedMilestone.description}"
           </p>
 
           {/* Step Selector Pills */}
           <div className="mt-8 pt-4 border-t border-[#171717]/10 flex items-center justify-between">
-            <span className="text-[11px] font-sans text-[#71717A] uppercase tracking-wider">
+            <span className="text-[10px] font-sans text-[#71717A] uppercase tracking-widest font-medium">
               Step {milestones.findIndex((m) => m.id === selectedMilestone.id) + 1} of {milestones.length}
             </span>
 
@@ -175,11 +198,11 @@ export const MilestoneConstellation: React.FC<MilestoneConstellationProps> = ({
                 <button
                   key={m.id}
                   onClick={() => handleSelectStar(m, idx)}
-                  aria-label={`Jump to ${m.year}`}
-                  className={`w-2.5 h-2.5 rounded-full transition-all cursor-pointer ${
+                  aria-label={`Jump to ${m.year}: ${m.title}`}
+                  className={`h-2 rounded-full transition-all cursor-pointer focus:outline-none ${
                     selectedMilestone.id === m.id
-                      ? 'bg-[#8E1624] w-6'
-                      : 'bg-[#F2EFEB] hover:bg-[#8E1624]/40'
+                      ? 'bg-[#8E1624] w-5'
+                      : 'bg-[#F2EFEB] hover:bg-[#8E1624]/40 w-2'
                   }`}
                 />
               ))}
