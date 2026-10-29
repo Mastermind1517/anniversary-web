@@ -64,7 +64,7 @@ export const MilestoneConstellation: React.FC<MilestoneConstellationProps> = ({
                   role="button"
                   tabIndex={0}
                   aria-label={`Milestone ${m.year}: ${m.title}`}
-                  className="cursor-pointer focus:outline-none"
+                  className="cursor-pointer focus:outline-none group/star"
                   onClick={() => handleSelectStar(m, idx)}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
@@ -73,6 +73,18 @@ export const MilestoneConstellation: React.FC<MilestoneConstellationProps> = ({
                     }
                   }}
                 >
+                  {/* Keyboard Focus Halo Indicator */}
+                  <circle
+                    cx={m.coordinates.x}
+                    cy={m.coordinates.y}
+                    r="6.5"
+                    fill="none"
+                    stroke="#FFFFFF"
+                    strokeWidth="0.8"
+                    strokeDasharray="2 2"
+                    className="opacity-0 group-focus-visible/star:opacity-100 transition-opacity"
+                  />
+
                   {/* Outer pulse circle when selected */}
                   {isSelected && (
                     <circle
@@ -116,7 +128,7 @@ export const MilestoneConstellation: React.FC<MilestoneConstellationProps> = ({
               role="button"
               tabIndex={0}
               aria-label="Discover Polaris Secret Star"
-              className="cursor-pointer group focus:outline-none"
+              className="cursor-pointer group/polaris focus:outline-none"
               onClick={() => {
                 sound.playChime(880.0);
                 onOpenSecretStar?.();
@@ -129,6 +141,17 @@ export const MilestoneConstellation: React.FC<MilestoneConstellationProps> = ({
                 }
               }}
             >
+              {/* Keyboard Focus Ring */}
+              <circle
+                cx="86"
+                cy="18"
+                r="6.5"
+                fill="none"
+                stroke="#FFFFFF"
+                strokeWidth="0.8"
+                strokeDasharray="2 2"
+                className="opacity-0 group-focus-visible/polaris:opacity-100 transition-opacity"
+              />
               <circle
                 cx="86"
                 cy="18"
@@ -168,24 +191,26 @@ export const MilestoneConstellation: React.FC<MilestoneConstellationProps> = ({
 
         {/* Selected Milestone Story Card (White-dominant luxury editorial card) */}
         <div className="w-full lg:w-2/5 bg-white border border-[#171717]/10 rounded-sm p-6 sm:p-8 shadow-[0_4px_24px_rgba(23,23,23,0.06)] transition-all duration-500">
-          <div className="flex items-center justify-between border-b border-[#171717]/10 pb-3 mb-4">
-            <span className="font-serif text-[#8E1624] text-xl font-medium flex items-center gap-2">
-              <Star className="w-4 h-4 fill-[#8E1624]" />
-              {selectedMilestone.year}
-            </span>
-            <span className="font-sans text-[10px] uppercase tracking-widest text-[#71717A] flex items-center gap-1 font-medium">
-              <Calendar className="w-3 h-3 text-[#8E1624]" />
-              {selectedMilestone.date}
-            </span>
+          <div key={selectedMilestone.id} className="animate-editorial-fade">
+            <div className="flex items-center justify-between border-b border-[#171717]/10 pb-3 mb-4">
+              <span className="font-serif text-[#8E1624] text-xl font-medium flex items-center gap-2">
+                <Star className="w-4 h-4 fill-[#8E1624]" />
+                {selectedMilestone.year}
+              </span>
+              <span className="font-sans text-[10px] uppercase tracking-widest text-[#71717A] flex items-center gap-1 font-medium">
+                <Calendar className="w-3 h-3 text-[#8E1624]" />
+                {selectedMilestone.date}
+              </span>
+            </div>
+
+            <h3 className="font-serif text-2xl sm:text-3xl font-light text-[#171717] mb-3 leading-snug">
+              {selectedMilestone.title}
+            </h3>
+
+            <p className="font-editorial text-base sm:text-lg text-[#71717A] italic leading-relaxed">
+              "{selectedMilestone.description}"
+            </p>
           </div>
-
-          <h3 className="font-serif text-2xl sm:text-3xl font-light text-[#171717] mb-3 leading-snug">
-            {selectedMilestone.title}
-          </h3>
-
-          <p className="font-editorial text-base sm:text-lg text-[#71717A] italic leading-relaxed">
-            "{selectedMilestone.description}"
-          </p>
 
           {/* Step Selector Pills */}
           <div className="mt-8 pt-4 border-t border-[#171717]/10 flex items-center justify-between">

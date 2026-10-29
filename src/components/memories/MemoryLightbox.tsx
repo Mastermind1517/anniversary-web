@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import type { MemoryItem } from '../../types';
+import { anniversaryData } from '../../data/anniversaryContent';
 import { sound } from '../audio/SoundEngine';
 import { getLenis } from '../../hooks/useLenis';
 import gsap from 'gsap';
@@ -247,11 +248,20 @@ export const MemoryLightbox: React.FC<MemoryLightboxProps> = ({
 
     // Cross-fade animation on navigate
     if (stageCardRef.current) {
-      gsap.fromTo(
-        stageCardRef.current,
-        { x: -18, opacity: 0.8 },
-        { x: 0, opacity: 1, duration: 0.32, ease: 'power2.out' }
-      );
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (prefersReducedMotion) {
+        gsap.fromTo(
+          stageCardRef.current,
+          { opacity: 0.6 },
+          { opacity: 1, duration: 0.2, ease: 'power1.out' }
+        );
+      } else {
+        gsap.fromTo(
+          stageCardRef.current,
+          { x: -16, opacity: 0.85 },
+          { x: 0, opacity: 1, duration: 0.3, ease: 'power2.out' }
+        );
+      }
     }
     onNavigate(nextIdx);
   }, [currentIndex, isClosing, memories.length, onNavigate]);
@@ -265,11 +275,20 @@ export const MemoryLightbox: React.FC<MemoryLightboxProps> = ({
 
     // Cross-fade animation on navigate
     if (stageCardRef.current) {
-      gsap.fromTo(
-        stageCardRef.current,
-        { x: 18, opacity: 0.8 },
-        { x: 0, opacity: 1, duration: 0.32, ease: 'power2.out' }
-      );
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (prefersReducedMotion) {
+        gsap.fromTo(
+          stageCardRef.current,
+          { opacity: 0.6 },
+          { opacity: 1, duration: 0.2, ease: 'power1.out' }
+        );
+      } else {
+        gsap.fromTo(
+          stageCardRef.current,
+          { x: 16, opacity: 0.85 },
+          { x: 0, opacity: 1, duration: 0.3, ease: 'power2.out' }
+        );
+      }
     }
     onNavigate(nextIdx);
   }, [currentIndex, isClosing, memories.length, onNavigate]);
@@ -406,7 +425,7 @@ export const MemoryLightbox: React.FC<MemoryLightboxProps> = ({
 
         {/* 3D Flip Card Container */}
         <div
-          className={`relative w-full min-h-[480px] sm:min-h-[560px] md:min-h-[590px] transition-transform duration-700 preserve-3d cursor-pointer ${
+          className={`relative w-full min-h-[480px] sm:min-h-[560px] md:min-h-[590px] transition-transform duration-500 ease-out preserve-3d cursor-pointer motion-reduce:transition-none ${
             isFlipped ? 'rotate-y-180' : 'rotate-y-0'
           }`}
           style={{
@@ -524,7 +543,7 @@ export const MemoryLightbox: React.FC<MemoryLightboxProps> = ({
             <div className="pt-3.5 border-t border-[#171717]/10 flex items-center justify-between text-xs text-[#71717A] font-sans">
               <div className="flex items-center gap-2 sm:gap-3 text-[11px]">
                 <span className="font-mono text-[#71717A] uppercase">{memory.date}</span>
-                <span className="text-[#8E1624] font-editorial italic text-sm">Julian & Elena</span>
+                <span className="text-[#8E1624] font-editorial italic text-sm">{anniversaryData.partner1} & {anniversaryData.partner2}</span>
               </div>
 
               <button

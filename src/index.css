@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+@theme {
+  --animate-bounce: none;
+}
+
 @layer base {
   :root {
     /* Strict Typography Tokens */
@@ -19,7 +23,7 @@
     --color-ink-black: #171717;
     --color-deep-black: #09090A;
     --color-charcoal: #303030;
-    --color-muted-caption: #71717A;
+    --color-muted-caption: #524C48;
 
     /* Compatibility Semantic Aliases */
     --color-bg-dark: #09090A;
@@ -29,7 +33,7 @@
     --color-wax-dark: #4F0D15;
     --color-wax-highlight: #A81E2E;
     --color-ink: #171717;
-    --color-ink-faded: #71717A;
+    --color-ink-faded: #524C48;
   }
 
   * {
@@ -154,3 +158,81 @@
 .crease-shadow-bottom {
   background: linear-gradient(to top, rgba(23, 23, 23, 0.14) 0%, rgba(23, 23, 23, 0.03) 40%, transparent 100%);
 }
+
+/* Tactile Motion Keyframes & Deceleration */
+@keyframes noteUnfold {
+  from {
+    opacity: 0;
+    transform: perspective(800px) rotateX(-12deg) translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: perspective(800px) rotateX(0deg) translateY(0);
+  }
+}
+
+@keyframes editorialFade {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shakeHorizontal {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  20%, 60% {
+    transform: translateX(-6px);
+  }
+  40%, 80% {
+    transform: translateX(6px);
+  }
+}
+
+@keyframes modalEnter {
+  from {
+    opacity: 0;
+    transform: scale(0.97) translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.animate-note-unfold {
+  animation: noteUnfold 340ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  transform-origin: top center;
+}
+
+.animate-editorial-fade {
+  animation: editorialFade 260ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-shake {
+  animation: shakeHorizontal 450ms cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+.animate-modal-enter {
+  animation: modalEnter 240ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Reduced Motion Overrides */
+@media (prefers-reduced-motion: reduce) {
+  .animate-note-unfold,
+  .animate-editorial-fade,
+  .animate-modal-enter {
+    animation: editorialFade 150ms ease-out forwards;
+    transform: none !important;
+  }
+  .animate-shake {
+    animation: none !important;
+    transform: none !important;
+  }
+}
+

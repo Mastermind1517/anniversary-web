@@ -30,11 +30,11 @@ export const anniversaryData: AnniversaryData = {
   // ---------------------------------------------------------------------------
   // 2. PARTNERS & CORE ANNIVERSARY MILESTONES
   // ---------------------------------------------------------------------------
-  partner1: "Julian",
-  partner2: "Elena",
-  anniversaryDate: "2022-10-24T18:00:00", // Drives the precision elapsed chronometer
-  tagline: "Four Years of Holding Eternity in Our Hands",
-  envelopeMonogram: "J & E", // Inscribed on the 3D wax seal
+  partner1: "Krishangi",
+  partner2: "Parthib",
+  anniversaryDate: "2025-10-25T18:00:00", // Drives the precision elapsed chronometer
+  tagline: "One Year of Holding Eternity in Our Hands",
+  envelopeMonogram: "K & P", // Inscribed on the 3D wax seal
 
   // ---------------------------------------------------------------------------
   // 3. OPENING SCENE & ENVELOPE INVITATION
@@ -47,14 +47,15 @@ export const anniversaryData: AnniversaryData = {
   },
 
   openingLetter: {
-    salutation: "Dearest Elena,",
+    salutation: "Moromor Shona,",
     lines: [
-      "Every year with you unfolds like a romance I never want to put down.",
-      "From quiet sunrise tea to late-night highway melodies, you are my home.",
-      "Walk with me through our memories, our songs, and all our tomorrows.",
+      "Ek kahini jitu likha nasile, jikhon ami, etiya, protipol, likhi asu.",
+      "Ek good morning or pora i hate you tumar logot nuxu loi ek dhuniya kahini",
+      "Protitu muhurto jen tumar logotei ximito, xaiye xoday tumar buliyei ajio asu kalio asu aro xoday asu",
+      "Promise Promise Promise, Pinky Promise"
     ],
     closing: "Always yours,",
-    signature: "Julian",
+    signature: "Jaan",
   },
 
   // ---------------------------------------------------------------------------
@@ -405,9 +406,9 @@ export const anniversaryData: AnniversaryData = {
       id: "msg-seal",
       source: "wax-seal",
       title: "The Monogram Inscription",
-      subtitle: "Archival Seal • J & E",
-      content: "Embossed in deep crimson wax: 'J & E' signifies two separate wandering spirits who discovered that their favorite destination was simply each other.",
-      dateTag: "October 24, 2022",
+      subtitle: "Archival Seal • K & P",
+      content: "Embossed in deep crimson wax: 'K & P' signifies two separate wandering spirits who discovered that their favorite destination was simply each other.",
+      dateTag: "October 25, 2025",
     },
     {
       id: "msg-compass",
@@ -447,14 +448,14 @@ export const anniversaryData: AnniversaryData = {
       "Four years together is only the prologue to the epic story we are writing. As long as I have breath, my heart belongs to you, wholly and without hesitation.",
     ],
     closing: "Forever and always yours,",
-    signature: "Julian",
+    signature: "Jaan",
   },
 
   // ---------------------------------------------------------------------------
   // 12. SECRET GETAWAY VAULT (PASSCODE PROTECTED)
   // ---------------------------------------------------------------------------
   secretVault: {
-    passcode: "1024", // Enter your anniversary month & day (e.g. MMDD)
+    passcode: "1025", // Enter your anniversary month & day (e.g. MMDD)
     hint: "The four digits of our anniversary date (MM/DD)",
     destination: "Lake Como, Villa Bellissima",
     date: "November 15 – 22, 2026",

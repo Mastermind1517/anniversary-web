@@ -154,10 +154,10 @@ export const ChronometerCounter: React.FC<ChronometerCounterProps> = ({
         </div>
 
         {/* Subtitle Badge */}
-        <div className="inline-flex items-center gap-2 text-sm font-editorial italic text-[#71717A]">
+        <div className="inline-flex items-center gap-2 text-sm font-editorial italic text-[#524C48]">
           <Heart className="w-3.5 h-3.5 fill-[#8E1624] text-[#8E1624]" />
           <span>
-            {partner1} & {partner2} • {elapsed.totalYears} magnificent years of loving each other
+            {partner1} & {partner2} • {Number(elapsed.totalYears) <= 1 ? 'One magnificent year' : `${elapsed.totalYears} magnificent years`} of loving each other
           </span>
         </div>
       </div>

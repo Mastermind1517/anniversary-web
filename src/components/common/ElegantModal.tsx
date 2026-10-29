@@ -89,7 +89,7 @@ export const ElegantModal: React.FC<ElegantModalProps> = ({
         ref={modalRef}
         tabIndex={-1}
         onClick={(e) => e.stopPropagation()}
-        className={`relative w-full ${maxWidth} bg-[#F9F8F5] text-[#171717] rounded-sm p-6 sm:p-8 shadow-[0_24px_50px_-12px_rgba(23,23,23,0.25)] border border-[#171717]/10 my-auto animate-in fade-in zoom-in-95 duration-200 outline-none`}
+        className={`relative w-full ${maxWidth} bg-[#F9F8F5] text-[#171717] rounded-sm p-6 sm:p-8 shadow-[0_24px_50px_-12px_rgba(23,23,23,0.25)] border border-[#171717]/10 my-auto animate-modal-enter outline-none`}
       >
         {/* Close Button */}
         <button

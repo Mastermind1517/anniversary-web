@@ -124,7 +124,7 @@ export const LoveNotesJar: React.FC<LoveNotesJarProps> = ({ notes }) => {
               role="button"
               tabIndex={0}
               aria-label={`Unfold letter ${noteNumber}: ${note.teaser}`}
-              className={`relative p-5 sm:p-6 rounded-sm border transition-all duration-300 cursor-pointer text-left flex flex-col justify-between min-h-[160px] sm:min-h-[180px] shadow-[0_2px_12px_rgba(23,23,23,0.03)] hover:shadow-[0_12px_28px_-6px_rgba(23,23,23,0.08)] hover:-translate-y-1 group focus:outline-none focus-visible:ring-1 focus-visible:ring-[#8E1624] ${
+              className={`relative p-5 sm:p-6 rounded-sm border transition-all duration-300 cursor-pointer text-left flex flex-col justify-between min-h-[160px] sm:min-h-[180px] shadow-[0_2px_12px_rgba(23,23,23,0.03)] hover:shadow-[0_12px_28px_-6px_rgba(23,23,23,0.08)] hover:-translate-y-1 active:scale-[0.98] group focus:outline-none focus-visible:ring-1 focus-visible:ring-[#8E1624] ${
                 isOpened
                   ? 'bg-[#F9F8F5] border-[#8E1624]/25'
                   : 'bg-white border-[#171717]/10 hover:border-[#8E1624]/40'
@@ -173,13 +173,15 @@ export const LoveNotesJar: React.FC<LoveNotesJarProps> = ({ notes }) => {
         subtitle={activeModalNote ? `Letter 0${activeModalNote.id} • ${activeModalNote.category}` : ''}
         icon={<Heart className="w-3.5 h-3.5 fill-[#8E1624] text-[#8E1624]" />}
       >
-        <div className="my-5">
-          <p className="font-serif text-xl sm:text-2xl font-light text-[#171717] leading-relaxed italic border-l-2 border-[#8E1624]/40 pl-5 py-1">
-            "{activeModalNote?.content}"
-          </p>
+        <div key={activeModalNote?.id} className="my-5 animate-note-unfold">
+          <div className="relative py-3 px-2 sm:px-4">
+            <p className="font-serif text-xl sm:text-2xl font-light text-[#171717] leading-relaxed italic text-center">
+              "{activeModalNote?.content}"
+            </p>
+          </div>
 
-          <div className="mt-6 flex items-center justify-between pt-3 border-t border-[#171717]/10 text-xs text-[#71717A] font-sans">
-            <span className="font-editorial italic text-xs text-[#71717A]">Inscribed in heart forever</span>
+          <div className="mt-6 flex items-center justify-between pt-3 border-t border-[#171717]/10 text-xs text-[#524C48] font-sans">
+            <span className="font-editorial italic text-xs text-[#524C48]">Inscribed in heart forever</span>
             <span className="font-handwriting text-2xl text-[#8E1624]">Forever Yours</span>
           </div>
         </div>

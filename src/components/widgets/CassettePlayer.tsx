@@ -32,6 +32,16 @@ export const CassettePlayer: React.FC<CassettePlayerProps> = ({ tracks }) => {
     seekTo(newPercent);
   };
 
+  const handleScrubKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      seekTo(Math.min(100, progress + 5));
+    } else if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      seekTo(Math.max(0, progress - 5));
+    }
+  };
+
   const trackNum = String(currentTrackIndex + 1).padStart(2, '0');
   const totalTracks = String(tracks.length).padStart(2, '0');
 
@@ -94,9 +104,10 @@ export const CassettePlayer: React.FC<CassettePlayerProps> = ({ tracks }) => {
             >
               {/* Spinning Spool Hub */}
               <div
-                className={`w-12 h-12 rounded-full border-2 border-white/20 bg-[#26262a] flex items-center justify-center ${
-                  isPlaying ? 'animate-[spin_4s_linear_infinite]' : ''
-                }`}
+                className="w-12 h-12 rounded-full border-2 border-white/20 bg-[#26262a] flex items-center justify-center animate-[spin_4s_linear_infinite] motion-reduce:animate-none"
+                style={{
+                  animationPlayState: isPlaying ? 'running' : 'paused',
+                }}
               >
                 {/* 6-Tooth Hub Teeth */}
                 <div className="relative w-full h-full flex items-center justify-center">
@@ -109,16 +120,16 @@ export const CassettePlayer: React.FC<CassettePlayerProps> = ({ tracks }) => {
             </div>
           </div>
 
-          {/* Magnetic Tape Bridge & Minimal Harmonic Spectrum */}
+          {/* Magnetic Tape Bridge & Minimal Harmonic Spectrum (GPU-accelerated scaleY) */}
           <div className="flex-1 px-3 flex flex-col items-center justify-center gap-2">
             {/* Minimal Harmonic Bars */}
             <div className="flex items-end justify-center gap-1.5 h-6 w-full">
               {frequencyData.map((bar, i) => (
                 <div
                   key={i}
-                  className="w-[2px] bg-[#8E1624] rounded-full transition-all duration-100"
+                  className="w-[2px] h-full bg-[#8E1624] rounded-full origin-bottom transition-transform duration-100 ease-out motion-reduce:transition-none"
                   style={{
-                    height: isPlaying ? `${Math.max(25, bar * 100)}%` : '20%',
+                    transform: `scaleY(${isPlaying ? Math.max(0.2, bar) : 0.2})`,
                     opacity: isPlaying ? 0.9 : 0.35,
                   }}
                 />
@@ -138,9 +149,10 @@ export const CassettePlayer: React.FC<CassettePlayerProps> = ({ tracks }) => {
             >
               {/* Spinning Spool Hub */}
               <div
-                className={`w-12 h-12 rounded-full border-2 border-white/20 bg-[#26262a] flex items-center justify-center ${
-                  isPlaying ? 'animate-[spin_4s_linear_infinite]' : ''
-                }`}
+                className="w-12 h-12 rounded-full border-2 border-white/20 bg-[#26262a] flex items-center justify-center animate-[spin_4s_linear_infinite] motion-reduce:animate-none"
+                style={{
+                  animationPlayState: isPlaying ? 'running' : 'paused',
+                }}
               >
                 <div className="relative w-full h-full flex items-center justify-center">
                   <div className="absolute w-2.5 h-[1px] bg-white/40" />
@@ -156,13 +168,14 @@ export const CassettePlayer: React.FC<CassettePlayerProps> = ({ tracks }) => {
         {/* Tactile Scrubber Track */}
         <div
           onClick={handleScrubClick}
+          onKeyDown={handleScrubKeyDown}
           role="slider"
           tabIndex={0}
-          aria-label="Cassette scrub bar"
+          aria-label="Cassette scrub bar (use left and right arrow keys to seek)"
           aria-valuenow={Math.round(progress)}
           aria-valuemin={0}
           aria-valuemax={100}
-          className="mt-5 w-full h-3 flex items-center cursor-pointer group"
+          className="mt-5 w-full h-4 flex items-center cursor-pointer group focus:outline-none focus-visible:ring-1 focus-visible:ring-[#8E1624] rounded-sm px-0.5"
         >
           <div className="w-full h-1 bg-white/15 rounded-full overflow-hidden">
             <div
@@ -186,7 +199,7 @@ export const CassettePlayer: React.FC<CassettePlayerProps> = ({ tracks }) => {
             <button
               onClick={prevTrack}
               aria-label="Previous track"
-              className="p-2.5 rounded-full text-[#71717A] hover:text-white hover:bg-white/5 transition-all cursor-pointer focus:outline-none focus-visible:ring-1 focus-visible:ring-[#8E1624]"
+              className="p-2.5 rounded-full text-[#71717A] hover:text-white hover:bg-white/5 active:scale-95 transition-all cursor-pointer focus:outline-none focus-visible:ring-1 focus-visible:ring-[#8E1624]"
             >
               <SkipBack className="w-4 h-4" />
             </button>
@@ -194,7 +207,7 @@ export const CassettePlayer: React.FC<CassettePlayerProps> = ({ tracks }) => {
             <button
               onClick={togglePlay}
               aria-label={isPlaying ? 'Pause tape' : 'Play tape'}
-              className="w-11 h-11 rounded-full bg-[#8E1624] hover:bg-[#A81E2E] text-white flex items-center justify-center transition-all shadow-lg cursor-pointer focus:outline-none focus-visible:ring-1 focus-visible:ring-white"
+              className="w-11 h-11 rounded-full bg-[#8E1624] hover:bg-[#A81E2E] active:scale-95 text-white flex items-center justify-center transition-all shadow-lg cursor-pointer focus:outline-none focus-visible:ring-1 focus-visible:ring-white"
             >
               {isPlaying ? <Pause className="w-4 h-4 fill-current" /> : <Play className="w-4 h-4 fill-current ml-0.5" />}
             </button>
@@ -202,7 +215,7 @@ export const CassettePlayer: React.FC<CassettePlayerProps> = ({ tracks }) => {
             <button
               onClick={nextTrack}
               aria-label="Next track"
-              className="p-2.5 rounded-full text-[#71717A] hover:text-white hover:bg-white/5 transition-all cursor-pointer focus:outline-none focus-visible:ring-1 focus-visible:ring-[#8E1624]"
+              className="p-2.5 rounded-full text-[#71717A] hover:text-white hover:bg-white/5 active:scale-95 transition-all cursor-pointer focus:outline-none focus-visible:ring-1 focus-visible:ring-[#8E1624]"
             >
               <SkipForward className="w-4 h-4" />
             </button>

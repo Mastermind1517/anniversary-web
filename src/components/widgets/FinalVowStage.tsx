@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import confetti from 'canvas-confetti';
 import type { AnniversaryData } from '../../types';
 import { sound } from '../audio/SoundEngine';
 import { Heart, Sparkles, Printer, Lock, Unlock, RotateCcw, Feather, Check, MapPin, Calendar } from 'lucide-react';
@@ -24,11 +25,16 @@ export const FinalVowStage: React.FC<FinalVowStageProps> = ({
   onReplay,
 }) => {
   const [isVowSealed, setIsVowSealed] = useState(false);
+  const [isHolding, setIsHolding] = useState(false);
+  const [holdProgress, setHoldProgress] = useState(0);
   const [isVaultOpen, setIsVaultOpen] = useState(false);
   const [vaultPasscode, setVaultPasscode] = useState('');
   const [isVaultUnlocked, setIsVaultUnlocked] = useState(false);
   const [vaultErrorShake, setVaultErrorShake] = useState(false);
   const [vaultErrorMessage, setVaultErrorMessage] = useState('');
+
+  const holdTimerRef = useRef<number | null>(null);
+  const holdStartTimeRef = useRef<number | null>(null);
 
   const sectionRef = useRef<HTMLElement | null>(null);
   const letterRef = useRef<HTMLDivElement | null>(null);
@@ -121,13 +127,67 @@ export const FinalVowStage: React.FC<FinalVowStageProps> = ({
     return () => ctx.revert();
   }, [letter.paragraphs]);
 
-  // Click seal interaction
+  // Tactile press-and-hold seal interaction
   const handleSealVow = () => {
     if (isVowSealed) return;
     sound.playWaxCrack();
     sound.playChord(523.25); // Celestial C5 chord
     setIsVowSealed(true);
+    setIsHolding(false);
+    setHoldProgress(100);
+
+    try {
+      confetti({
+        particleCount: 50,
+        spread: 70,
+        origin: { y: 0.72 },
+        colors: ['#8E1624', '#A81E2E', '#F9F8F5', '#C5A880'],
+        disableForReducedMotion: true,
+      });
+    } catch {
+      // Safe fallback
+    }
   };
+
+  const startHold = () => {
+    if (isVowSealed) return;
+    setIsHolding(true);
+    sound.playPaperRustle();
+    holdStartTimeRef.current = Date.now();
+    const duration = 1500; // 1.5 seconds
+
+    const tick = () => {
+      const elapsed = Date.now() - (holdStartTimeRef.current || Date.now());
+      const p = Math.min(100, (elapsed / duration) * 100);
+      setHoldProgress(p);
+
+      if (p >= 100) {
+        handleSealVow();
+      } else {
+        holdTimerRef.current = requestAnimationFrame(tick);
+      }
+    };
+
+    holdTimerRef.current = requestAnimationFrame(tick);
+  };
+
+  const cancelHold = () => {
+    if (isVowSealed) return;
+    setIsHolding(false);
+    if (holdTimerRef.current) {
+      cancelAnimationFrame(holdTimerRef.current);
+      holdTimerRef.current = null;
+    }
+    setHoldProgress(0);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (holdTimerRef.current) {
+        cancelAnimationFrame(holdTimerRef.current);
+      }
+    };
+  }, []);
 
   const handlePrint = () => {
     sound.playPaperRustle();
@@ -269,38 +329,86 @@ export const FinalVowStage: React.FC<FinalVowStageProps> = ({
         </div>
 
         {/* INTERACTIVE WAX SEAL IMPRESSION */}
-        <div className="mt-12 pt-8 border-t border-[#171717]/10 flex flex-col items-center justify-center">
+        <div className="mt-12 pt-8 border-t border-[#171717]/10 flex flex-col items-center justify-center select-none">
           <button
-            onClick={handleSealVow}
+            type="button"
+            onPointerDown={startHold}
+            onPointerUp={cancelHold}
+            onPointerLeave={cancelHold}
+            onContextMenu={(e) => e.preventDefault()}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                handleSealVow();
+              }
+            }}
             aria-label={
               isVowSealed
                 ? 'Vow sealed forever with official wax impression'
-                : 'Click to impress the permanent wax seal on our vow'
+                : 'Press and hold to impress the permanent wax seal on our vow'
             }
-            className={`group relative flex flex-col items-center justify-center transition-all duration-500 cursor-pointer focus:outline-none focus-visible:ring-1 focus-visible:ring-[#8E1624] rounded-full p-2 ${
-              isVowSealed ? 'cursor-default' : 'hover:scale-105 active:scale-95'
+            className={`group relative flex flex-col items-center justify-center transition-all duration-300 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#8E1624] rounded-full p-3 touch-none ${
+              isVowSealed ? 'cursor-default' : isHolding ? 'scale-95' : 'hover:scale-105 active:scale-95'
             }`}
           >
+            {/* SVG Radial Hold Progress Ring */}
+            {!isVowSealed && (
+              <svg
+                className="absolute inset-0 w-full h-full -rotate-90 pointer-events-none"
+                viewBox="0 0 128 128"
+              >
+                {/* Track */}
+                <circle
+                  cx="64"
+                  cy="64"
+                  r="58"
+                  fill="none"
+                  stroke="#171717"
+                  strokeOpacity="0.08"
+                  strokeWidth="2.5"
+                />
+                {/* Filling Progress Stroke */}
+                <circle
+                  cx="64"
+                  cy="64"
+                  r="58"
+                  fill="none"
+                  stroke="#8E1624"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  strokeDasharray="364.4"
+                  strokeDashoffset={364.4 - (holdProgress / 100) * 364.4}
+                  className="transition-[stroke-dashoffset] duration-75"
+                />
+              </svg>
+            )}
+
             {/* Organic Matte Crimson Wax Seal Medallion */}
             <div
               className={`w-24 h-24 sm:w-28 sm:h-28 rounded-full flex flex-col items-center justify-center transition-all duration-700 shadow-xl relative border ${
                 isVowSealed
                   ? 'bg-gradient-to-br from-[#8E1624] via-[#500D15] to-[#38080E] text-white border-white/20 shadow-[0_8px_24px_rgba(79,13,21,0.35)]'
+                  : isHolding
+                  ? 'bg-[#261014] text-[#F9F8F5] border-[#8E1624]'
                   : 'bg-[#171717] text-[#F9F8F5] border-[#303030] hover:border-[#8E1624]'
               }`}
             >
               <Heart
                 className={`w-5 h-5 sm:w-6 sm:h-6 transition-transform duration-300 ${
-                  isVowSealed ? 'fill-white text-white scale-110' : 'fill-current text-[#8E1624]'
+                  isVowSealed
+                    ? 'fill-white text-white scale-110'
+                    : isHolding
+                    ? 'fill-[#8E1624] text-[#8E1624] scale-125'
+                    : 'fill-current text-[#8E1624]'
                 }`}
               />
 
               <span className="font-serif text-[10px] sm:text-[11px] font-medium tracking-[0.2em] uppercase mt-1">
-                {isVowSealed ? 'SEALED' : 'SEAL VOW'}
+                {isVowSealed ? 'SEALED' : isHolding ? `${Math.round(holdProgress)}%` : 'SEAL VOW'}
               </span>
 
               <span className="font-sans text-[8px] tracking-wider uppercase opacity-75">
-                {isVowSealed ? 'FOR ALL TIME' : 'TAP TO IMPRESS'}
+                {isVowSealed ? 'FOR ALL TIME' : isHolding ? 'HOLDING...' : 'HOLD TO SEAL'}
               </span>
 
               {/* Verified check badge if sealed */}
@@ -315,7 +423,9 @@ export const FinalVowStage: React.FC<FinalVowStageProps> = ({
             <span className="font-editorial italic text-base sm:text-lg text-[#8E1624] mt-4 text-center max-w-sm">
               {isVowSealed
                 ? `"${partner1} & ${partner2} • Bound across all iterations of time"`
-                : 'Click to impress our names into eternity'}
+                : isHolding
+                ? 'Holding seal... keep holding to seal'
+                : 'Press and hold to impress our seal into eternity'}
             </span>
           </button>
         </div>
@@ -330,7 +440,7 @@ export const FinalVowStage: React.FC<FinalVowStageProps> = ({
             setIsVaultOpen(true);
           }}
           aria-label="Open secret keepsake vault"
-          className="px-6 py-3 rounded-sm bg-white hover:bg-[#171717] text-[#171717] hover:text-[#F9F8F5] border border-[#171717]/15 shadow-sm hover:shadow transition-all duration-300 font-sans text-xs uppercase tracking-[0.24em] flex items-center gap-2.5 cursor-pointer group focus:outline-none focus-visible:ring-1 focus-visible:ring-[#8E1624]"
+          className="px-6 py-3 rounded-sm bg-white hover:bg-[#171717] active:scale-95 text-[#171717] hover:text-[#F9F8F5] border border-[#171717]/15 shadow-sm hover:shadow transition-all duration-300 font-sans text-xs uppercase tracking-[0.24em] flex items-center gap-2.5 cursor-pointer group focus:outline-none focus-visible:ring-1 focus-visible:ring-[#8E1624]"
         >
           <Lock className="w-3.5 h-3.5 text-[#8E1624] group-hover:text-white transition-colors" />
           <span>Open Secret Vault</span>
@@ -340,7 +450,7 @@ export const FinalVowStage: React.FC<FinalVowStageProps> = ({
         <button
           onClick={handlePrint}
           aria-label="Print keepsake letter"
-          className="px-6 py-3 rounded-sm bg-white hover:bg-[#171717] text-[#171717] hover:text-[#F9F8F5] border border-[#171717]/15 shadow-sm hover:shadow transition-all duration-300 font-sans text-xs uppercase tracking-[0.24em] flex items-center gap-2.5 cursor-pointer group focus:outline-none focus-visible:ring-1 focus-visible:ring-[#8E1624]"
+          className="px-6 py-3 rounded-sm bg-white hover:bg-[#171717] active:scale-95 text-[#171717] hover:text-[#F9F8F5] border border-[#171717]/15 shadow-sm hover:shadow transition-all duration-300 font-sans text-xs uppercase tracking-[0.24em] flex items-center gap-2.5 cursor-pointer group focus:outline-none focus-visible:ring-1 focus-visible:ring-[#8E1624]"
         >
           <Printer className="w-3.5 h-3.5 text-[#71717A] group-hover:text-white transition-colors" />
           <span>Print Keepsake</span>
@@ -350,7 +460,7 @@ export const FinalVowStage: React.FC<FinalVowStageProps> = ({
         <button
           onClick={handleReplayClick}
           aria-label="Replay experience from the opening envelope"
-          className="px-6 py-3 rounded-sm bg-white hover:bg-[#171717] text-[#171717] hover:text-[#F9F8F5] border border-[#171717]/15 shadow-sm hover:shadow transition-all duration-300 font-sans text-xs uppercase tracking-[0.24em] flex items-center gap-2.5 cursor-pointer group focus:outline-none focus-visible:ring-1 focus-visible:ring-[#8E1624]"
+          className="px-6 py-3 rounded-sm bg-white hover:bg-[#171717] active:scale-95 text-[#171717] hover:text-[#F9F8F5] border border-[#171717]/15 shadow-sm hover:shadow transition-all duration-300 font-sans text-xs uppercase tracking-[0.24em] flex items-center gap-2.5 cursor-pointer group focus:outline-none focus-visible:ring-1 focus-visible:ring-[#8E1624]"
         >
           <RotateCcw className="w-3.5 h-3.5 text-[#71717A] group-hover:text-white transition-colors group-hover:-rotate-90 duration-300" />
           <span>Replay Our Journey</span>
@@ -452,18 +562,20 @@ export const FinalVowStage: React.FC<FinalVowStageProps> = ({
                 </span>
               </div>
 
-              <h4 className="font-serif text-2xl font-light text-[#171717] mb-3">
+              <h4 className="font-serif text-2xl font-light text-[#171717] mb-3 text-center">
                 A Weekend Just for Us
               </h4>
 
-              <p className="font-editorial text-lg sm:text-xl text-[#171717] leading-relaxed italic border-l-2 border-[#8E1624]/40 pl-4 py-1">
-                "{secretVault.secretMessage}"
-              </p>
+              <div className="bg-[#171717]/[0.025] rounded-sm p-4 sm:p-5 border border-[#171717]/8 my-3">
+                <p className="font-editorial text-lg sm:text-xl text-[#171717] leading-relaxed italic text-center">
+                  "{secretVault.secretMessage}"
+                </p>
+              </div>
             </div>
 
-            <div className="flex items-center justify-between text-xs text-[#71717A] font-sans pt-2">
-              <span className="font-editorial italic">Pack your bags, my love</span>
-              <span className="font-handwriting text-2xl text-[#8E1624]">Forever Julian</span>
+            <div className="flex items-center justify-between text-xs text-[#524C48] font-sans pt-2">
+              <span className="font-editorial italic text-[#524C48]">Pack your bags, my love</span>
+              <span className="font-handwriting text-2xl text-[#8E1624]">Forever {letter.signature || partner1}</span>
             </div>
           </div>
         )}

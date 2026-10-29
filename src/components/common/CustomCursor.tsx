@@ -10,8 +10,9 @@ export const CustomCursor: React.FC = () => {
   const haloRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    // Only enable on desktop with fine pointer
+    // Only enable on desktop with fine pointer and when reduced motion is not requested
     if (window.matchMedia('(pointer: coarse)').matches) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
     let mouseX = -100;
     let mouseY = -100;
